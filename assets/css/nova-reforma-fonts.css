@@ -1,0 +1,43 @@
+/**
+ * Reforma 2018 — local @font-face (theme assets).
+ */
+
+@font-face {
+	font-family: "Reforma";
+	font-style: normal;
+	font-weight: 300;
+	font-display: swap;
+	src:
+		url("../font/Reforma2018/Reforma2018-Blanca.woff2") format("woff2"),
+		url("../font/Reforma2018/Reforma2018-Blanca.woff") format("woff");
+}
+
+@font-face {
+	font-family: "Reforma";
+	font-style: normal;
+	font-weight: 500;
+	font-display: swap;
+	src:
+		url("../font/Reforma2018/Reforma2018-Gris.woff2") format("woff2"),
+		url("../font/Reforma2018/Reforma2018-Gris.woff") format("woff");
+}
+
+@font-face {
+	font-family: "Reforma";
+	font-style: normal;
+	font-weight: 700;
+	font-display: swap;
+	src:
+		url("../font/Reforma2018/Reforma2018-Negra.woff2") format("woff2"),
+		url("../font/Reforma2018/Reforma2018-Negra.woff") format("woff");
+}
+
+@font-face {
+	font-family: "Reforma";
+	font-style: normal;
+	font-weight: 900;
+	font-display: swap;
+	src:
+		url("../font/Reforma2018/Reforma2018-Negra.woff2") format("woff2"),
+		url("../font/Reforma2018/Reforma2018-Negra.woff") format("woff");
+}

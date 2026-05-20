@@ -27,17 +27,19 @@
 	padding: 12px;
 	background: #fff;
 	border-top: 1px solid #e5e7eb;
-	box-shadow: 0 -4px 13.4px 0 rgba(0, 0, 0, 0.1);
+	box-shadow: 0px -4px 13.4px 0px #0000001A;
+
 }
 
-.nova-sticky-cart__inner.ast-container {
+.nova-sticky-cart__inner .ast-container {
 	display: flex !important;
 	justify-content: space-between;
 	max-width: 1140px;
 	margin: 0 auto;
+	width: 100%;
 }
 
-.nova-sticky-cart__inner--fixed.ast-container {
+.nova-sticky-cart__inner--fixed .ast-container {
 	padding-left: 12px;
 	padding-right: 12px;
 }

@@ -1,0 +1,6 @@
+/**
+ * Landing page template — hide empty header shell.
+ */
+.nova-landing-header {
+	display: none;
+}

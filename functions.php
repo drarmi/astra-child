@@ -44,6 +44,38 @@ add_action(
 		wp_enqueue_style( 'parent-style', get_template_directory_uri() . '/style.css', array(), $file_ver( $parent_css ) );
 		wp_enqueue_style( 'astra-child-style', get_stylesheet_uri(), array( 'parent-style' ), $file_ver( $child_css ) );
 
+		if ( is_page_template( 'page-templates/7-reason.php' ) ) {
+			$landing_css = NOVA_CHILD_DIR . '/assets/css/nova-landing.css';
+			wp_enqueue_style(
+				'enjoy-nova-landing',
+				NOVA_CHILD_URI . '/assets/css/nova-landing.css',
+				array( 'astra-child-style' ),
+				$file_ver( $landing_css )
+			);
+			$reforma_fonts_css = NOVA_CHILD_DIR . '/assets/css/nova-reforma-fonts.css';
+			wp_enqueue_style(
+				'enjoy-nova-reforma-fonts',
+				NOVA_CHILD_URI . '/assets/css/nova-reforma-fonts.css',
+				array( 'enjoy-nova-landing' ),
+				$file_ver( $reforma_fonts_css )
+			);
+			$reason_css = NOVA_CHILD_DIR . '/assets/css/7-reason.css';
+			wp_enqueue_style(
+				'enjoy-nova-7-reason',
+				NOVA_CHILD_URI . '/assets/css/7-reason.css',
+				array( 'enjoy-nova-reforma-fonts' ),
+				$file_ver( $reason_css )
+			);
+			$reason_js = NOVA_CHILD_DIR . '/assets/js/7-reason.js';
+			wp_enqueue_script(
+				'enjoy-nova-7-reason',
+				NOVA_CHILD_URI . '/assets/js/7-reason.js',
+				array(),
+				$file_ver( $reason_js ),
+				true
+			);
+		}
+
 		if ( is_product() ) {
 			$deps = wp_style_is( 'woocommerce-general', 'registered' ) ? array( 'woocommerce-general' ) : array();
 			// Old handle may still be registered (cache/snippets) with ver=1.0.0 — drop it, use a new handle + filemtime.
@@ -95,9 +127,12 @@ add_action(
 );
 
 /**
- * Force cache-busting for hero / sticky bar CSS if another plugin enqueues the same file with a stale ver.
+ * Restore filemtime cache-busting for child theme CSS in assets/css/.
  *
- * @param string|false $src   Style URL.
+ * Theme Editor (ms_theme_editor_src) replaces ver= with wp_get_theme()->Version (1.0.0)
+ * for any stylesheet URL containing the child theme slug. Scripts are unaffected.
+ *
+ * @param string|false $src    Style URL.
  * @param string       $handle Style handle (unused but required by filter).
  * @return string|false
  */
@@ -107,12 +142,15 @@ add_filter(
 		if ( ! is_string( $src ) || '' === $src ) {
 			return $src;
 		}
-		if ( false === strpos( $src, '/nova-product-hero.css' ) && false === strpos( $src, '/nova-sticky-cart-bar.css' ) ) {
+		$assets_prefix = NOVA_CHILD_URI . '/assets/css/';
+		if ( false === strpos( $src, $assets_prefix ) ) {
 			return $src;
 		}
-		$path = false !== strpos( $src, '/nova-sticky-cart-bar.css' )
-			? NOVA_CHILD_DIR . '/assets/css/nova-sticky-cart-bar.css'
-			: NOVA_CHILD_DIR . '/assets/css/nova-product-hero.css';
+		$file = basename( strtok( $src, '?' ) );
+		if ( ! is_string( $file ) || '' === $file ) {
+			return $src;
+		}
+		$path = NOVA_CHILD_DIR . '/assets/css/' . $file;
 		$ver  = is_file( $path ) ? (string) filemtime( $path ) : (string) time();
 		return add_query_arg( 'ver', $ver, remove_query_arg( 'ver', $src ) );
 	},
@@ -290,23 +328,41 @@ function nova_render_sticky_cart_bar_markup() {
 }
 
 /**
- * Shortcode: [nova_sticky_cart]
+ * Gate: single product, then render sticky bar once (footer + shortcode share this).
  *
- * Place in Elementor (Shortcode widget) where the bar should sit in the document flow.
- *
- * @return string
+ * @return void
  */
-function nova_sticky_cart_shortcode() {
+function nova_try_render_sticky_cart_bar() {
+	static $done = false;
+	if ( $done ) {
+		return;
+	}
+	if ( ! function_exists( 'is_product' ) || ! is_product() ) {
+		return;
+	}
 	if ( ! function_exists( 'WC' ) ) {
-		return '';
+		return;
 	}
 
-	ob_start();
+	global $product;
+	$pid = get_queried_object_id();
+	$p   = $product instanceof WC_Product ? $product : wc_get_product( $pid );
+
+	/**
+	 * Return false to skip the sticky cart bar on a product.
+	 *
+	 * @param bool            $enabled Whether to render the bar.
+	 * @param WC_Product|bool $p       Product object or false.
+	 */
+	if ( ! apply_filters( 'nova_sticky_cart_bar_enabled', true, $p ) ) {
+		return;
+	}
+
+	$done = true;
 	nova_render_sticky_cart_bar_markup();
-	return ob_get_clean();
 }
 
-add_shortcode( 'nova_sticky_cart', 'nova_sticky_cart_shortcode' );
+add_action( 'wp_footer', 'nova_try_render_sticky_cart_bar', 20 );
 
 /**
  * Gate: single product, filter, then render once (avoids duplicate if several hooks fire).
