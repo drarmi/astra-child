@@ -1,0 +1,630 @@
+/**
+ * Product hero (non-Elementor). RTL-friendly grid.
+ */
+
+ .ast-container{
+	overflow: hidden;
+ }
+
+.nova-product-hero {
+	box-sizing: border-box;
+	max-width: 1200px;
+	margin: 0 auto 2rem;
+	padding: 1.5rem 1rem 2rem;
+	overflow: hidden;
+}
+
+.nova-product-hero__grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: clamp(1rem, 3vw, 2.5rem);
+	align-items: start;
+}
+
+@media (max-width: 900px) {
+	.nova-product-hero__grid {
+		grid-template-columns: 1fr;
+		gap: 16px 0;
+	}
+}
+
+.nova-product-hero__media .woocommerce-product-gallery {
+	margin: 0;
+	position: relative;
+}
+
+.nova-product-hero__media .flex-control-thumbs {
+	margin-top: 0.75rem;
+}
+
+/* Flexslider: prev/next arrows (WooCommerce hides them by default in many themes). */
+.nova-product-hero__media .woocommerce-product-gallery .flex-direction-nav {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    left: 0;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+}
+
+.nova-product-hero__media .woocommerce-product-gallery .flex-direction-nav a {
+	opacity: 1;
+	visibility: visible;
+	width: 2.25rem;
+	height: 2.25rem;
+	line-height: 2.25rem;
+	text-align: center;
+	border-radius: 50%;
+	background: transparent;
+	box-shadow: none;
+	color: #111;
+	text-shadow: none;
+	top: 50%;
+	transform: translateY(-50%);
+	margin: 0;
+	z-index: 3;
+	font-size: 0 !important;
+	display: block;
+}
+
+.nova-product-hero__media .woocommerce-product-gallery .flex-direction-nav .flex-prev {
+	inset-inline-start: 0.5rem;
+	inset-inline-end: auto;
+	background: url(arrow-right.svg) no-repeat center center;
+}
+
+.nova-product-hero__media .woocommerce-product-gallery .flex-direction-nav .flex-next {
+	inset-inline-end: 0.5rem;
+	inset-inline-start: auto;
+	background: url(arrow-left.svg) no-repeat center center;
+}
+
+.nova-product-hero__media .woocommerce-product-gallery:hover .flex-direction-nav a,
+.nova-product-hero__media .woocommerce-product-gallery .flex-direction-nav a:hover {
+	opacity: 1;
+}
+
+/* Dot pager under main image */
+.nova-product-hero__media .woocommerce-product-gallery .flex-control-nav {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 0.35rem;
+	margin: 6px 0 0 0;
+	padding: 0;
+	list-style: none;
+	position: relative;
+	bottom: auto;
+}
+
+.nova-product-hero__media .woocommerce-product-gallery .flex-control-nav li {
+	margin: 0;
+}
+
+.nova-product-hero__media .woocommerce-product-gallery .flex-control-nav a {
+	width: 9px;
+	height: 9px;
+	border-radius: 50%;
+	background: rgba(0, 0, 0, 0.25);
+	box-shadow: none;
+	text-indent: -9999px;
+	overflow: hidden;
+	display: block;
+}
+
+.nova-product-hero__media .woocommerce-product-gallery .flex-control-nav a.flex-active {
+    background: #000 !important;
+}
+
+.nova-product-hero__media .woocommerce-product-gallery .flex-control-nav a:hover {
+	background: #098786;
+}
+
+/* No hover zoom in hero gallery (backup if any zoom layer is still injected). */
+.nova-product-hero__media .woocommerce-product-gallery__image img,
+.nova-product-hero__media .woocommerce-product-gallery .flex-viewport img {
+	cursor: default !important;
+}
+
+.nova-product-hero__media .woocommerce-product-gallery__image > a {
+	cursor: default !important;
+	pointer-events: none;
+}
+
+.nova-product-hero__media .zoomImg,
+.nova-product-hero__media .zoomContainer {
+	display: none !important;
+}
+
+.nova-product-hero__breadcrumbs {
+	margin: 0 0 26px 0;
+	font-size: 0.85rem;
+	line-height: 1.4;
+}
+
+.nova-product-hero__breadcrumbs .woocommerce-breadcrumb {
+	margin: 0;
+}
+
+.nova-product-hero__title {
+	margin: 0 0 10px 0;
+    font-size: clamp(1.35rem, 2.5vw, 1.85rem);
+    line-height: 1.25;
+    font-weight: 600;
+    font-family: "Reforma", Sans-serif;
+    font-size: 29px;
+    font-weight: 900;
+    letter-spacing: 2.7px;
+	color: #017372;
+}
+
+.nova-product-hero__rating {
+	margin: 0 0 12px 0;
+}
+
+.nova-product-hero__price-usage {
+	display: flex;
+    align-items: center;  
+	gap: 10px;
+	margin: 0 0 26px 0;
+}
+
+.nova-product-hero__price-usage .nova-product-hero__price {
+	margin: 0;
+	color: rgb(0, 0, 0);
+    font-size: 23px;
+    font-style: normal;
+    font-weight: 900;
+    line-height: 20px;
+	font-family: "Reforma", Sans-serif;
+}
+
+.nova-product-hero__price-usage .nova-product-hero__price *{
+	margin: 0;
+}
+
+.nova-product-hero__price-usage .nova-product-hero__price .woocommerce-Price-amount {
+	font-weight: 600;
+}
+
+.nova-product-hero__price-usage .nova-product-hero__usage-line {
+    margin: 0;
+    color: #A95775;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 20px;
+    font-family: "Reforma", Sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-right: 1px solid #757575;
+    padding-right: 8px;
+}
+
+.nova-product-hero__repurchase {
+    margin: 0 0 26px 0;
+    font-size: 14px;
+    line-height: 20px;
+    color: #757575;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nova-product-hero__short-desc {
+    margin: 0 0 26px 0;
+	line-height: 1.6;
+}
+
+.nova-product-hero__short-desc *{
+	margin-bottom: 12px;
+}
+
+.nova-product-hero__icon-list {
+	list-style: none;
+	margin: 0 0 1rem;
+	padding: 0;
+}
+
+.nova-product-hero__icon-list--delivery {
+    padding: 10px;
+    background: rgba(186, 104, 134, 0.10);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+	margin: 0 0 26px 0;
+}
+
+.nova-product-hero__icon-list li {
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 300;
+	line-height: 26px;
+	color: #000;
+	display: flex;
+    gap: 5px;
+}
+
+.nova-product-hero__icon-list li:last-child {
+	margin-bottom: 0;
+}
+
+.nova-product-hero__list-icon-img {
+	width: 20px;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 20px;
+}
+
+.nova-product-hero__list-icon-img img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	display: block;
+}
+
+.nova-product-hero__bullet-icon {
+	flex-shrink: 0;
+	line-height: 1;
+	color: #098786;
+}
+
+.nova-product-hero__cart {
+	margin: 0 0 26px 0;
+}
+
+.nova-product-hero__cart--primary .cart {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 7px;
+	align-items: center;	
+	margin-bottom: 12px;
+}
+
+.nova-product-hero__cart--primary .quantity {
+	display: inline-flex;
+	align-items: stretch;
+}
+
+/* Shared quantity stepper: input left, up/down chevrons stacked on the right. */
+.nova-qty.nova-qty--stepper {
+	position: relative;
+	display: inline-flex;
+	align-items: stretch;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	direction: ltr;
+	border-radius: 0px;
+	overflow: hidden;
+	border: 1px solid #E5E5E5;
+	box-sizing: border-box;
+	vertical-align: middle;
+}
+
+.nova-qty--stepper > label.screen-reader-text {
+	border: 0;
+	clip: rect(0 0 0 0);
+	clip-path: inset(50%);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+	white-space: nowrap;
+}
+
+.nova-qty__spin {
+	display: flex;
+	flex-direction: column;
+	flex: 0 0 auto;
+	width: 24px;
+	border-left: 1px solid #E5E5E5;
+}
+
+.nova-qty__spin .nova-qty__btn {
+	flex: 1 1 50%;
+	width: 100%;
+	min-width: 0;
+	min-height: 0;
+	margin: 0;
+	padding: 0;
+	height: auto;
+	border: none;
+	border-radius: 0;
+	background: transparent;
+	color: #666666;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: background 0.15s ease;
+}
+
+.nova-qty__btn--up {
+	border-bottom: 1px solid #c8c8c8;
+}
+
+.nova-qty__spin .nova-qty__btn:hover {
+	background: #e8e8e8;
+}
+
+.nova-qty__spin .nova-qty__btn:focus {
+	outline: 2px solid #019594;
+	outline-offset: -2px;
+	z-index: 1;
+}
+
+.nova-qty__spin .nova-qty__btn:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+
+.nova-qty__svg {
+	display: block;
+	flex-shrink: 0;
+	pointer-events: none;
+}
+
+.nova-qty--stepper .input-text.qty,
+.nova-qty--stepper input.qty {
+	margin: 0;
+	border: none;
+	border-radius: 0;
+	box-shadow: none;
+	text-align: center;
+	-moz-appearance: textfield;
+    width: 32px !important;
+	min-width: auto;
+}
+
+.nova-qty--stepper .input-text.qty::-webkit-outer-spin-button,
+.nova-qty--stepper .input-text.qty::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+.nova-product-hero__cart--primary button.button {
+	flex: 1 1 auto;
+	min-width: 12rem;
+	height: 45px;
+    background: #019594 !important;
+    font-size: 22px;
+    font-weight: 500
+}
+
+.nova-product-hero__cart--primary .nova-qty--stepper .input-text.qty,
+.nova-product-hero__cart--primary .nova-qty--stepper input.qty {
+	height: 45px;
+	width: 32px;
+	font-size: 22px;
+	font-weight: 500;
+}
+
+.nova-product-hero__testimonials {
+	margin: 0 0 12px 0;
+	padding: 0;
+	list-style: none;
+	display: flex;
+	gap: 1rem;
+	overflow-x: auto;
+	scroll-snap-type: x mandatory;
+	-webkit-overflow-scrolling: touch;
+}
+
+.nova-product-hero__testimonial {
+	border: none;
+    border-radius: 0;
+    padding: 10px;
+    background: #F4FCFF;
+    max-width: 420px;
+    display: flex;
+    gap: 12px;
+}
+
+.nova-product-hero__testimonial-meta {
+
+}
+
+.nova-product-hero__testimonial-meta p {
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 700;
+    line-height: 1.4;
+    color: #206779;
+    margin: 0;
+}
+
+.nova-product-hero__testimonial-name,
+.nova-product-hero__testimonial-role {
+		color: #206779;
+		text-align: right;
+		font-size: 16px;
+		font-style: normal;
+		font-weight: 500;
+		line-height: 26px;
+	}
+
+.nova-product-hero__testimonial img {
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.nova-product-hero__how {
+    margin: 0;
+    padding: 0;
+    border-top: none;
+}
+
+h2.nova-product-hero__how-heading {
+    text-align: right;
+    font-size: 22px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 18px;
+	margin: 0 0 24px 0;
+}
+
+.nova-product-hero__how-rows {
+	display: grid;
+	gap: 0.75rem;
+}
+
+.nova-product-hero__how-row {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.65rem;
+}
+
+.nova-product-hero__how-row-icon {
+	flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #EEFBFF;
+}
+
+.nova-product-hero__how-row-icon img {
+	width: 20px;
+	height: auto;
+	object-fit: contain;
+	display: block;
+}
+
+.nova-product-hero__how-row-copy {
+	display: flex;
+	flex-direction: column;
+	gap: 0.2rem;
+	min-width: 0;
+}
+
+.nova-product-hero__how-label {
+    font-weight: 700;
+    font-size: 16px;
+	line-height: 1;
+}
+
+.nova-product-hero__how-value {
+    font-size: 16px;
+    line-height: 1;
+}
+
+.nova-product-hero__trust {
+	margin-top: 26px 0 0 0;
+}
+
+.nova-product-hero__trust img {
+	display: block;
+	max-width: 300px;
+	height: auto;
+}
+
+
+.ast-stock-detail span.ast-stock-avail{
+	font-weight: 700;
+	color: rgb(58, 58, 58);
+	font-size: 16px;
+}
+
+.ast-stock-detail span.stock.in-stock {
+	color: #77a464;
+}
+
+.ast-stock-detail span.stock.out-of-stock {
+	color: #A95775;
+}
+
+.woocommerce-product-details__short-description * {
+    text-align: right !important;
+}
+
+section.elementor-section.elementor-top-section.elementor-element.elementor-element-444a329.elementor-section-boxed.elementor-section-height-default.elementor-section-height-default {
+    display: none;
+}
+
+.woocommerce .star-rating, 
+.woocommerce .comment-form-rating .stars a,
+.woocommerce .star-rating::before {
+    color: #FFA503;
+}
+
+@media (max-width: 768px) {
+	section.nova-product-hero {
+		padding: 0 15px;
+		margin: 0;
+	}
+	.nova-product-hero__breadcrumbs{
+		display: none;
+	}
+	.woocommerce-product-gallery__image {
+		display: flex !important;
+		justify-content: center;
+	}
+	.nova-product-hero__title{
+		font-size: 22px;
+		line-height: 1;
+	}
+	.nova-product-hero__price-usage{
+		margin-bottom: 8px;
+	}
+	.nova-product-hero__rating{
+		margin-bottom: 8px;
+	}
+	.woocommerce-js .woocommerce-product-rating .star-rating {
+		margin: 7px 0 0 4px;
+		float: right;
+	}
+	.nova-product-hero__testimonials{
+		margin-bottom:  8px;
+	}
+
+	.nova-product-hero__testimonial img {
+		width: 34px;
+		height: 34px;
+	}
+
+	.nova-product-hero__repurchase{
+		margin-bottom: 8px;
+	}
+	p.ast-stock-detail {
+		margin-bottom: 5px;
+	}
+	.nova-product-hero__cart{
+		margin-bottom: 12px;
+	}
+
+	.woocommerce-product-gallery__image a {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.nova-product-hero__media .woocommerce-product-gallery__image img, 
+	.nova-product-hero__media .woocommerce-product-gallery .flex-viewport img {
+		height: 300px;
+        width: 300px;
+        object-fit: cover;
+	}
+	
+	.ast-above-header-section.ast-above-header-section-1 {
+		padding: 6px;
+	}
+	.ast-above-header-section .user-select{
+		line-height: 1.2;
+	}
+	.nova-sticky-cart__qty{
+		height: 44px !important;
+	}
+}

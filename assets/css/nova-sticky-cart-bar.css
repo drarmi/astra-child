@@ -1,0 +1,194 @@
+/**
+ * Single product — sticky purchase bar.
+ * Wrapper stays in document flow; .nova-sticky-cart__inner--fixed pins the inner bar to the viewport bottom.
+ */
+
+.nova-sticky-cart {
+	width: 100%;
+	padding-inline: 20px;
+}
+
+.nova-sticky-cart__inner {
+	display: grid;
+	align-items: center;
+	gap: 0.75rem 1rem;
+	padding: 12px 0;
+	max-width: 100%;
+	/* LTR: col1 = left = actions; col2 = right = product */
+	grid-template-columns: auto minmax(0, 1fr);
+}
+
+.nova-sticky-cart__inner--fixed {
+	position: fixed;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 100050;
+	padding: 12px;
+	background: #fff;
+	border-top: 1px solid #e5e7eb;
+	box-shadow: 0 -4px 13.4px 0 rgba(0, 0, 0, 0.1);
+}
+
+.nova-sticky-cart__inner.ast-container {
+	display: flex !important;
+	justify-content: space-between;
+	max-width: 1140px;
+	margin: 0 auto;
+}
+
+.nova-sticky-cart__inner--fixed.ast-container {
+	padding-left: 12px;
+	padding-right: 12px;
+}
+
+.nova-sticky-cart__actions {
+	grid-column: 1;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 0.5rem 0.75rem;
+	flex: 1;
+}
+
+.nova-sticky-cart__product {
+	grid-column: 2;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 0.75rem;
+	min-width: 0;
+	text-align: end;
+}
+
+html[dir="rtl"] .nova-sticky-cart__inner {
+	/* RTL: col1 = main-start (right) = product; col2 (left) = actions */
+	grid-template-columns: minmax(0, 1fr) auto;
+}
+
+html[dir="rtl"] .nova-sticky-cart__product {
+	grid-column: 1;
+	justify-content: flex-start;
+	text-align: start;
+}
+
+html[dir="rtl"] .nova-sticky-cart__actions {
+	grid-column: 2;
+	justify-content: flex-end;
+}
+
+.nova-sticky-cart__thumb {
+	flex-shrink: 0;
+	width: 52px;
+	height: 52px;
+	display: block;
+	overflow: hidden;
+	border-radius: 8px;
+	background: #f5f5f5;
+}
+
+.nova-sticky-cart__thumb img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.nova-sticky-cart__title {
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 1.25;
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	min-width: 0;
+	color: #017372;
+}
+
+.nova-sticky-cart__price {
+	font-weight: 700;
+	display: inline-block;
+}
+
+.nova-sticky-cart__price .woocommerce-Price-amount {
+	font-weight: 600;
+}
+
+.nova-sticky-cart__qty-wrap .nova-qty--stepper {
+	border-color: #c8c8c8;
+}
+
+.nova-sticky-cart__qty-wrap .nova-qty__spin {
+	width: 24px;
+	min-width: 24px;
+}
+
+.nova-sticky-cart__qty-wrap .nova-sticky-cart__qty {
+	flex: 1 1 auto;
+	width: 2.75rem;
+	min-width: 2.5rem;
+	min-height: 43px;
+	height: 43px;
+	padding: 0;
+	font-size: 18px;
+	font-weight: 500;
+}
+
+.nova-sticky-cart__actions .nova-sticky-cart__submit,
+.nova-sticky-cart__actions .nova-sticky-cart__choose {
+	min-height: auto;
+	white-space: nowrap;
+	width: 280px;
+	height: 43px;
+	flex-wrap: nowrap;
+	padding: 0;
+	font-size: 18px !important;
+	font-weight: 400;
+	background: #019594 !important;
+}
+
+/* Mobile: name → qty → price → button (single column) */
+@media (max-width: 921px) {
+	.nova-sticky-cart__inner {
+		display: flex;
+		align-items: stretch;
+		gap: 0.5rem;
+	}
+
+	.nova-sticky-cart__product {
+		grid-column: auto;
+		order: 1;
+		justify-content: flex-start;
+		text-align: start;
+	}
+
+	.nova-sticky-cart__actions {
+		grid-column: auto;
+		order: 2;
+		display: flex;
+		align-items: stretch;
+		gap: 0.45rem;
+	}
+
+	.nova-sticky-cart__submit,
+	.nova-sticky-cart__choose {
+		width: 100%;
+	}
+
+	.nova-sticky-cart__title {
+		font-size: 13px;
+		line-height: 1.2;
+	}
+
+	.nova-sticky-cart__actions .nova-sticky-cart__submit,
+	.nova-sticky-cart__actions .nova-sticky-cart__choose {
+		width: 140px;
+		padding: 0 !important;
+		font-size: 13px !important;
+	}
+
+	.nova-sticky-cart__thumb {
+		display: none;
+	}
+}
