@@ -40,6 +40,7 @@ $max_qty = is_numeric($max_qty) && $max_qty > 0 ? (int) $max_qty : '';
 
 $simple_like = $product->is_type('simple') || $product->is_type('subscription') || $product->is_type('external');
 $anchor_id   = 'product-' . $pid;
+$on_sale = $product->is_on_sale();
 ?>
 <div id="nova-sticky-cart-bar" class="nova-sticky-cart" role="region" aria-label="<?php esc_attr_e('Product purchase', 'woocommerce'); ?>" data-product-id="<?php echo esc_attr((string) $pid); ?>" data-anchor="<?php echo esc_attr($anchor_id); ?>">
 	<div class="nova-sticky-cart__inner">
@@ -53,31 +54,32 @@ $anchor_id   = 'product-' . $pid;
 			</div>
 			<div class="nova-sticky-cart__actions">
 				<?php if ($simple_like) : ?>
-					<div class="nova-sticky-cart__qty-wrap">
-						<label class="screen-reader-text" for="nova-sticky-cart-qty"><?php esc_html_e('Quantity', 'woocommerce'); ?></label>
-						<div class="nova-qty nova-qty--stepper">
-							<input
-								type="number"
-								id="nova-sticky-cart-qty"
-								class="nova-sticky-cart__qty input-text qty text"
-								name="nova_sticky_qty_display"
-								value="1"
-								min="1"
-								<?php echo $max_qty ? 'max="' . esc_attr((string) $max_qty) . '"' : ''; ?>
-								step="1" />
-							<div class="nova-qty__spin">
-								<button type="button" class="nova-qty__btn nova-qty__btn--up" aria-label="<?php echo esc_attr__('Increase quantity', 'woocommerce'); ?>"><?php echo nova_get_qty_stepper_svg_up(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
-																																											?></button>
-								<button type="button" class="nova-qty__btn nova-qty__btn--down" aria-label="<?php echo esc_attr__('Reduce quantity', 'woocommerce'); ?>"><?php echo nova_get_qty_stepper_svg_down(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
-																																											?></button>
+					<?php if (!$on_sale) : ?>
+						<div class="nova-sticky-cart__qty-wrap">
+							<label class="screen-reader-text" for="nova-sticky-cart-qty"><?php esc_html_e('Quantity', 'woocommerce'); ?></label>
+							<div class="nova-qty nova-qty--stepper">
+								<input
+									type="number"
+									id="nova-sticky-cart-qty"
+									class="nova-sticky-cart__qty input-text qty text"
+									name="nova_sticky_qty_display"
+									value="1"
+									min="1"
+									<?php echo $max_qty ? 'max="' . esc_attr((string) $max_qty) . '"' : ''; ?>
+									step="1" />
+								<div class="nova-qty__spin">
+									<button type="button" class="nova-qty__btn nova-qty__btn--up" aria-label="<?php echo esc_attr__('Increase quantity', 'woocommerce'); ?>"><?php echo nova_get_qty_stepper_svg_up(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+																																												?></button>
+									<button type="button" class="nova-qty__btn nova-qty__btn--down" aria-label="<?php echo esc_attr__('Reduce quantity', 'woocommerce'); ?>"><?php echo nova_get_qty_stepper_svg_down(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+																																												?></button>
+								</div>
 							</div>
 						</div>
-					</div>
+					<?php endif; ?>
 
-
-					<button type="button" class="button alt nova-sticky-cart__submit">
+					<button type="button" class="button alt nova-sticky-cart__submit <?php echo $on_sale ? 'nova-sticky-cart__submit--on-sale' : ''; ?>">
 						<?php echo esc_html($product->add_to_cart_text()); ?>
-						<div class="nova-sticky-cart__price"><?php echo wp_kses_post($product->get_price_html()); ?></div>
+						<div class="nova-sticky-cart__price <?php echo $on_sale ? 'nova-sticky-cart__price--on-sale' : ''; ?>"><?php echo wp_kses_post($product->get_price_html()); ?></div>
 					</button>
 
 				<?php else : ?>
