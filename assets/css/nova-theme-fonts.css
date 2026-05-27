@@ -1,5 +1,5 @@
 /**
- * Reforma 2018 — local @font-face (theme assets).
+ * Local @font-face — Reforma 2018, Rubik (theme assets).
  */
 
 @font-face {
@@ -40,4 +40,24 @@
 	src:
 		url("../font/Reforma2018/Reforma2018-Negra.woff2") format("woff2"),
 		url("../font/Reforma2018/Reforma2018-Negra.woff") format("woff");
+}
+
+@font-face {
+	font-family: "Rubik";
+	font-style: normal;
+	font-weight: 300 900;
+	font-display: swap;
+	src:
+		url("../font/Rubik/Rubik-VariableFont_wght.ttf") format("truetype-variations"),
+		url("../font/Rubik/Rubik-VariableFont_wght.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "Rubik";
+	font-style: italic;
+	font-weight: 300 900;
+	font-display: swap;
+	src:
+		url("../font/Rubik/Rubik-Italic-VariableFont_wght.ttf") format("truetype-variations"),
+		url("../font/Rubik/Rubik-Italic-VariableFont_wght.ttf") format("truetype");
 }

@@ -17,9 +17,10 @@ $repeater_main_repeater = get_field('repeater_main_repeater');
                 <?php
                 $number = $index + 1;
                 $parity = ($number % 2 === 1) ? 'odd' : 'even';
+                $image_repeater_main_repeater_size = $row["image_repeater_main_repeater_size"] ?? 'cover'; 
                 ?>
                 <div class="reason-repeater__row reason-repeater__row--<?php echo esc_attr($parity); ?>">
-                    <div class="reason-repeater__inner container">
+                    <div class="reason-repeater__inner container reason-repeater__inner--<?php echo esc_attr($image_repeater_main_repeater_size); ?>">
                         <div class="reason-repeater__text">
                             <div class="reason-repeater__num"><span><?php echo (int) $number; ?></span></div>
                             <p class="reason-repeater__title"><?php echo esc_html($row['title_repeater_main_repeater'] ?? ''); ?></p>
@@ -29,8 +30,9 @@ $repeater_main_repeater = get_field('repeater_main_repeater');
                         </div>
 
                         <?php if (! empty($row['image_repeater_main_repeater']['url'])): ?>
-                            <div class="reason-repeater__media">
+                            <div class="reason-repeater__media reason-repeater__media--<?php echo esc_attr($image_repeater_main_repeater_size); ?>">
                                 <img
+                                    style="object-fit: <?php echo esc_attr($image_repeater_main_repeater_size); ?>;"
                                     class="reason-repeater__img"
                                     loading="lazy"
                                     src="<?php echo esc_url($row['image_repeater_main_repeater']['url']); ?>"

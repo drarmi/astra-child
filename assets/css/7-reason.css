@@ -2,8 +2,8 @@
  * 7-reason landing — banner with fixed CTA.
  */
 
-.page-template-7-reason .nova-landing-content {
-  font-family: "Reforma", sans-serif;
+.page-template-7-reason * {
+	font-family: "Rubik", sans-serif;
 }
 
 .page-template-7-reason .container {
@@ -48,7 +48,6 @@
   font-size: 16px;
   font-weight: 700;
   line-height: 1.8;
-  font-family: "Reforma", sans-serif;
   @media (max-width: 768px) {
     font-size: 12px;
     margin-bottom: 24px;
@@ -61,7 +60,6 @@
   font-weight: 700;
   line-height: 1.2;
   color: #000000;
-  font-family: "Rubik", sans-serif;
   @media (max-width: 768px) {
     font-size: 40px;
   }
@@ -73,7 +71,6 @@
   font-size: 16px;
   line-height: 1.6;
   color: #000000;
-  font-family: "Rubik", sans-serif;
   @media (max-width: 768px) {
     margin-bottom: 32px;
   }
@@ -101,7 +98,6 @@
   border-radius: 2px;
   background: #f48441;
   color: #fff;
-  font-family: "Reforma", sans-serif;
   font-size: 26px;
   font-weight: 700;
   line-height: 1;
@@ -187,7 +183,6 @@
   font-size: 32px;
   font-weight: 500;
   line-height: 1.2;
-  font-family: "Rubik", sans-serif;
   color: #000000;
   @media (max-width: 768px) {
     font-size: 26px;
@@ -199,7 +194,6 @@
   font-size: inherit;
   font-weight: inherit;
   line-height: inherit;
-  font-family: inherit;
   color: inherit;
 }
 
@@ -210,7 +204,6 @@
   font-weight: 400;
   line-height: 1.6;
   color: #000000;
-  font-family: "Rubik", sans-serif;
 }
 
 .two-columns__grid {
@@ -251,7 +244,6 @@
 
 .two-columns__card strong span {
   font-weight: 600;
-  font-family: "Rubik", sans-serif;
   font-size: 26px;
   line-height: 1.1;
 }
@@ -292,7 +284,6 @@
   font-size: 32px;
   font-weight: 500;
   line-height: 1.1;
-  font-family: "Rubik", sans-serif;
   @media (max-width: 768px) {
     font-size: 24px;
   }
@@ -303,7 +294,6 @@
   font-size: inherit;
   font-weight: inherit;
   line-height: inherit;
-  font-family: inherit;
   color: inherit;
 }
 
@@ -357,7 +347,6 @@
 .button-wrapper > a {
   display: inline-block;
   background-color: #f48441;
-  font-family: "Reforma", sans-serif;
   font-size: 20px;
   font-weight: 700;
   line-height: 1.2;
@@ -402,7 +391,6 @@
   font-size: 32px;
   font-weight: 500;
   line-height: 1.2;
-  font-family: "Rubik", sans-serif;
   margin-bottom: 40px;
   @media (max-width: 768px) {
     font-size: 24px;
@@ -415,7 +403,6 @@
   font-size: 32px;
   font-weight: 500;
   line-height: 1.2;
-  font-family: "Rubik", sans-serif;
   margin-bottom: 40px;
 }
 
@@ -443,7 +430,6 @@
   font-size: 16px;
   font-weight: 400;
   line-height: 1.6;
-  font-family: "Rubik", sans-serif;
   color: #000000;
 }
 
@@ -481,7 +467,6 @@
   text-align: center;
   font-size: 16px;
   line-height: 1.6;
-  font-family: "Rubik", sans-serif;
   color: #000000;
   font-weight: 400;
 }
@@ -517,7 +502,6 @@
   font-size: 32px;
   font-weight: 500;
   line-height: 1.2;
-  font-family: "Rubik", sans-serif;
   @media (max-width: 768px) {
     font-size: 26px;
     max-width: unset;
@@ -560,6 +544,12 @@
     grid-row-start: unset;
   }
 }
+.reason-repeater__inner.container.reason-repeater__inner--contain{
+  align-items: center;
+}
+.reason-repeater__media.reason-repeater__media--contain{
+  height: fit-content;
+}
 
 .reason-repeater__inner {
   display: grid;
@@ -591,13 +581,11 @@
   font-size: 16px;
   font-weight: 600;
   line-height: 1;
-  font-family: "Rubik", sans-serif;
   margin-bottom: 12px;
   span {
     font-size: inherit;
     font-weight: inherit;
     line-height: inherit;
-    font-family: inherit;
     color: inherit;
   }
 }
@@ -619,7 +607,6 @@
   font-size: 24px;
   font-weight: 500;
   line-height: 1.8;
-  font-family: "Rubik", sans-serif;
   color: #000000;
   @media (max-width: 768px) {
     font-size: 20px;
@@ -644,7 +631,6 @@
   font-size: 32px;
   font-weight: 700;
   line-height: 1.2;
-  font-family: "Rubik", sans-serif;
   color: #000000;
 }
 
@@ -716,5 +702,10 @@
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: fill;
+}
+
+.reason-repeater__list{
+  @media screen and (max-width: 768px) {
+    padding-inline: 16px;
+  }
 }
