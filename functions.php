@@ -851,6 +851,47 @@ add_action(
 	100
 );
 
+/**
+ * Whether the current CartFlows checkout step uses the instant layout.
+ */
+function nova_checkout_is_instant_layout() {
+	if ( ! function_exists( '_is_wcf_checkout_type' ) || ! _is_wcf_checkout_type() ) {
+		return false;
+	}
+
+	if ( ! class_exists( 'Cartflows_Helper' ) || ! method_exists( 'Cartflows_Helper', 'is_instant_layout_enabled' ) ) {
+		return false;
+	}
+
+	$flow_id = 0;
+	if ( function_exists( 'wcf' ) && is_object( wcf()->utils ) && wcf()->utils->is_step_post_type() ) {
+		$flow_id = (int) wcf()->utils->get_flow_id();
+	}
+
+	return Cartflows_Helper::is_instant_layout_enabled( $flow_id );
+}
+
+/**
+ * Checkout: CartFlows custom coupon at the end of #order_review; hide default WC coupon UI.
+ */
+function nova_checkout_coupon_field_setup() {
+	if ( ! function_exists( 'is_checkout' ) || ! is_checkout() || is_order_received_page() ) {
+		return;
+	}
+
+	remove_action( 'woocommerce_before_checkout_form', 'woocommerce_checkout_coupon_form', 10 );
+
+	if ( ! class_exists( 'Cartflows_Checkout_Markup' ) || nova_checkout_is_instant_layout() ) {
+		return;
+	}
+
+	$markup = Cartflows_Checkout_Markup::get_instance();
+
+	remove_action( 'woocommerce_checkout_order_review', array( $markup, 'display_custom_coupon_field' ), 10 );
+	add_action( 'woocommerce_checkout_order_review', array( $markup, 'display_custom_coupon_field' ), 99 );
+}
+add_action( 'wp', 'nova_checkout_coupon_field_setup', 110 );
+
 add_action(
 	'wp_head',
 	function () {

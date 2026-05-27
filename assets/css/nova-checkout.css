@@ -378,6 +378,12 @@
   position: relative;
   vertical-align: top;
   accent-color: transparent;
+  display: block;
+}
+.woocommerce form .form-row label.checkbox, .woocommerce-page form .form-row label.checkbox{
+	display: flex;
+	align-items: center;
+	gap: 10px;
 }
 
 .nova-checkout
@@ -876,6 +882,210 @@ form
 form
   #order_review:not(.elementor-widget-woocommerce-checkout-page #order_review) {
   padding-inline: 24px;
+}
+
+.woocommerce-js .woocommerce table.shop_table{
+	margin-bottom: 0 !important;
+}
+
+/* Default WC coupon toggle/form (CartFlows custom field is used instead). */
+.nova-checkout form.checkout_coupon.woocommerce-form-coupon,
+.nova-checkout .woocommerce-form-coupon.checkout_coupon {
+  display: none !important;
+}
+
+.nova-checkout form.checkout > .woocommerce-info:has(a.showcoupon) {
+  display: none !important;
+}
+
+/* CartFlows custom coupon — match order review mockup (RTL: input right, button left). */
+.nova-checkout #order_review .wcf-custom-coupon-field,
+.wcf-embed-checkout-form .nova-checkout #order_review .wcf-custom-coupon-field {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 12px;
+  clear: both;
+  width: 100%;
+  margin: 0;
+  padding: 16px 0 24px;
+  border-top: 1px solid var(--nova-checkout-border);
+  border-bottom: 0;
+  box-sizing: border-box;
+}
+
+.nova-checkout #order_review .wcf-custom-coupon-field .wcf-coupon-col-1,
+.nova-checkout #order_review .wcf-custom-coupon-field .wcf-coupon-col-2,
+.wcf-embed-checkout-form
+  .nova-checkout
+  #order_review
+  .wcf-custom-coupon-field
+  .wcf-coupon-col-1,
+.wcf-embed-checkout-form
+  .nova-checkout
+  #order_review
+  .wcf-custom-coupon-field
+  .wcf-coupon-col-2 {
+  display: block;
+  width: auto;
+  margin: 0;
+  padding: 0;
+  float: none;
+}
+
+.nova-checkout #order_review .wcf-custom-coupon-field .wcf-coupon-col-1,
+.wcf-embed-checkout-form
+  .nova-checkout
+  #order_review
+  .wcf-custom-coupon-field
+  .wcf-coupon-col-1 {
+  flex: 1 1 68%;
+  min-width: 0;
+}
+
+.nova-checkout #order_review .wcf-custom-coupon-field .wcf-coupon-col-2,
+.wcf-embed-checkout-form
+  .nova-checkout
+  #order_review
+  .wcf-custom-coupon-field
+  .wcf-coupon-col-2 {
+  flex: 0 0 28%;
+  max-width: 120px;
+}
+
+.nova-checkout #order_review .wcf-custom-coupon-field .wcf-coupon-col-1 > span,
+.nova-checkout #order_review .wcf-custom-coupon-field .wcf-coupon-col-2 > span,
+.wcf-embed-checkout-form
+  .nova-checkout
+  #order_review
+  .wcf-custom-coupon-field
+  .wcf-coupon-col-1
+  > span,
+.wcf-embed-checkout-form
+  .nova-checkout
+  #order_review
+  .wcf-custom-coupon-field
+  .wcf-coupon-col-2
+  > span {
+  display: block;
+  width: 100%;
+}
+
+.nova-checkout #order_review .wcf-custom-coupon-field input.input-text,
+.nova-checkout #order_review .wcf-custom-coupon-field input.wcf-coupon-code-input,
+.wcf-embed-checkout-form
+  .nova-checkout
+  #order_review
+  .wcf-custom-coupon-field
+  input[type="text"] {
+  display: block;
+  width: 100% !important;
+  height: 44px;
+  margin: 0;
+  padding: 10px 12px !important;
+  border: 1px solid var(--nova-checkout-input-border) !important;
+  border-radius: var(--nova-checkout-input-radius) !important;
+  background: #ffffff !important;
+  color: var(--nova-checkout-text) !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  line-height: 1.4;
+  text-align: start;
+  direction: rtl;
+  box-shadow: none !important;
+  box-sizing: border-box;
+}
+
+.nova-checkout #order_review .wcf-custom-coupon-field input.input-text::placeholder,
+.wcf-embed-checkout-form
+  .nova-checkout
+  #order_review
+  .wcf-custom-coupon-field
+  input[type="text"]::placeholder {
+  color: var(--nova-checkout-muted) !important;
+  opacity: 1 !important;
+}
+
+.nova-checkout #order_review .wcf-custom-coupon-field input.input-text:focus,
+.wcf-embed-checkout-form
+  .nova-checkout
+  #order_review
+  .wcf-custom-coupon-field
+  input[type="text"]:focus {
+  border-color: var(--nova-checkout-accent) !important;
+  outline: none;
+  box-shadow: none !important;
+}
+
+.nova-checkout #order_review .wcf-custom-coupon-field button.wcf-submit-coupon,
+.wcf-embed-checkout-form
+  .nova-checkout
+  #order_review
+  .wcf-custom-coupon-field
+  button.wcf-submit-coupon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100% !important;
+  height: 44px;
+  margin: 0;
+  padding: 10px 16px !important;
+  border: 0 !important;
+  border-radius: var(--nova-checkout-input-radius) !important;
+  background: var(--nova-checkout-accent) !important;
+  color: #ffffff !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  line-height: 1.4;
+  letter-spacing: 0;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: none;
+  transition: background-color 0.2s ease;
+}
+
+.nova-checkout #order_review .wcf-custom-coupon-field button.wcf-submit-coupon:hover,
+.wcf-embed-checkout-form
+  .nova-checkout
+  #order_review
+  .wcf-custom-coupon-field
+  button.wcf-submit-coupon:hover {
+  background: var(--nova-checkout-accent-hover) !important;
+  color: #ffffff !important;
+}
+
+.nova-checkout #order_review .wcf-custom-coupon-field .woocommerce-message,
+.nova-checkout #order_review .wcf-custom-coupon-field .woocommerce-error,
+.wcf-embed-checkout-form
+  .nova-checkout
+  #order_review
+  .wcf-custom-coupon-field
+  .woocommerce-message,
+.wcf-embed-checkout-form
+  .nova-checkout
+  #order_review
+  .wcf-custom-coupon-field
+  .woocommerce-error {
+  flex: 1 1 100%;
+  width: 100%;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: var(--nova-checkout-input-radius);
+  font-size: 13px;
+  line-height: 1.4;
+  list-style: none;
+}
+
+@media (max-width: 520px) {
+  .nova-checkout #order_review .wcf-custom-coupon-field .wcf-coupon-col-2,
+  .wcf-embed-checkout-form
+    .nova-checkout
+    #order_review
+    .wcf-custom-coupon-field
+    .wcf-coupon-col-2 {
+    flex: 0 0 32%;
+    max-width: none;
+  }
 }
 form
   #order_review_heading:not(
