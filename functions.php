@@ -674,7 +674,10 @@ function nova_checkout_personal_fields_layout( $fields ) {
 			}
 
 			$consent['priority'] = 20;
-			$consent['class']    = array_merge( array( 'form-row-wide', 'update_totals_on_change' ), (array) $consent['class'] );
+			$consent['class']    = array_merge(
+				array( 'form-row-wide', 'update_totals_on_change', 'nova-checkout__vuelve-consent' ),
+				(array) $consent['class']
+			);
 			$fields['order']['vuelve_marketing_consent'] = $consent;
 		}
 	}
