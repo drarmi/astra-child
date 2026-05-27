@@ -85,6 +85,30 @@ add_action(
 				$checkout_deps,
 				$file_ver( $checkout_css )
 			);
+
+			$checkout_js = NOVA_CHILD_DIR . '/assets/js/nova-checkout.js';
+			if ( is_file( $checkout_js ) ) {
+				$checkout_script_deps = array( 'jquery' );
+				if ( wp_script_is( 'wc-checkout', 'registered' ) ) {
+					$checkout_script_deps[] = 'wc-checkout';
+				}
+				wp_enqueue_script(
+					'enjoy-nova-checkout',
+					NOVA_CHILD_URI . '/assets/js/nova-checkout.js',
+					$checkout_script_deps,
+					$file_ver( $checkout_js ),
+					true
+				);
+				wp_localize_script(
+					'enjoy-nova-checkout',
+					'novaCheckout',
+					array(
+						'ajax_url'      => admin_url( 'admin-ajax.php' ),
+						'remove_action' => 'wcf_woo_remove_cart_product',
+						'remove_nonce'  => wp_create_nonce( 'wcf-remove-cart-product' ),
+					)
+				);
+			}
 		}
 
 		if ( is_product() ) {
@@ -780,6 +804,78 @@ function nova_checkout_move_quantity_to_product_total( $subtotal_html, $cart_ite
 add_filter( 'woocommerce_cart_item_subtotal', 'nova_checkout_move_quantity_to_product_total', 20, 3 );
 
 /**
+ * Whether CartFlows "remove product" is enabled for the current checkout step.
+ */
+function nova_checkout_is_remove_product_enabled() {
+	$checkout_id = 0;
+
+	if ( function_exists( '_get_wcf_checkout_id' ) ) {
+		$checkout_id = (int) _get_wcf_checkout_id();
+	}
+
+	if ( ! $checkout_id ) {
+		$checkout_id = (int) get_the_ID();
+	}
+
+	if ( $checkout_id && function_exists( 'wcf' ) && is_object( wcf()->options ) ) {
+		$option = wcf()->options->get_checkout_meta_value( $checkout_id, 'wcf-remove-product-field' );
+		// CartFlows default is empty; only hide when explicitly turned off.
+		return 'no' !== $option;
+	}
+
+	return true;
+}
+
+/**
+ * CartFlows-compatible remove link for checkout order review (GTM may extend via filter).
+ *
+ * @param array  $cart_item     Cart item.
+ * @param string $cart_item_key Cart item key.
+ * @return string
+ */
+function nova_checkout_get_remove_product_link( $cart_item, $cart_item_key ) {
+	if ( ! nova_checkout_is_remove_product_enabled() ) {
+		return '';
+	}
+
+	$product_id = isset( $cart_item['product_id'] ) ? (int) $cart_item['product_id'] : 0;
+	if ( $product_id <= 0 ) {
+		return '';
+	}
+
+	$link = sprintf(
+		'<a href="javascript:void(0)" role="button" rel="nofollow" class="wcf-remove-product cartflows-icon cartflows-circle-cross" data-id="%s" data-item-key="%s" aria-label="%s"><span class="screen-reader-text">%s</span></a>',
+		esc_attr( (string) $product_id ),
+		esc_attr( $cart_item_key ),
+		esc_attr__( 'Remove product', 'astra-child' ),
+		esc_html__( 'Remove product', 'astra-child' )
+	);
+
+	/**
+	 * CartFlows + GTM may add data-* attributes; keep markup out of wp_kses_post().
+	 */
+	return apply_filters( 'woocommerce_cart_item_remove_link', $link, $cart_item_key );
+}
+
+/**
+ * Strip CartFlows order-review wrapper and return inner product title HTML.
+ *
+ * @param string $product_name Product column HTML.
+ * @return string
+ */
+function nova_checkout_unwrap_cartflows_product_name( $product_name ) {
+	if ( false === strpos( $product_name, 'wcf-product-name' ) ) {
+		return $product_name;
+	}
+
+	if ( preg_match( '/<div class="wcf-product-name">(.*)<\/div>\s*<\/div>\s*$/s', $product_name, $matches ) ) {
+		return $matches[1];
+	}
+
+	return wp_strip_all_tags( $product_name );
+}
+
+/**
  * Product thumbnail in checkout order review table.
  *
  * @param string $product_name Product title HTML.
@@ -792,8 +888,12 @@ function nova_checkout_order_item_name_with_image( $product_name, $cart_item, $c
 		return $product_name;
 	}
 
-	if ( false !== strpos( $product_name, 'wcf-product-image' ) || false !== strpos( $product_name, 'nova-checkout__order-product' ) ) {
+	if ( false !== strpos( $product_name, 'nova-checkout__order-product' ) ) {
 		return $product_name;
+	}
+
+	if ( false !== strpos( $product_name, 'wcf-product-image' ) ) {
+		$product_name = nova_checkout_unwrap_cartflows_product_name( $product_name );
 	}
 
 	$_product = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
@@ -806,8 +906,10 @@ function nova_checkout_order_item_name_with_image( $product_name, $cart_item, $c
 		return $product_name;
 	}
 
+	$remove_link = nova_checkout_get_remove_product_link( $cart_item, $cart_item_key );
+
 	return '<span class="nova-checkout__order-product">' .
-		'<span class="nova-checkout__order-product-thumb">' . $thumbnail . '</span>' .
+		'<span class="nova-checkout__order-product-thumb">' . $thumbnail . $remove_link . '</span>' .
 		'<span class="nova-checkout__order-product-name">' . wp_kses_post( $product_name ) . '</span>' .
 		'</span>';
 }
