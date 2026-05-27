@@ -804,9 +804,58 @@ function nova_checkout_move_quantity_to_product_total( $subtotal_html, $cart_ite
 add_filter( 'woocommerce_cart_item_subtotal', 'nova_checkout_move_quantity_to_product_total', 20, 3 );
 
 /**
+ * Persist ?cf-redirect=1 for checkout AJAX (update_order_review has no query string).
+ */
+function nova_checkout_sync_cf_redirect_flag() {
+	if ( ! function_exists( 'is_checkout' ) || ! is_checkout() || is_order_received_page() ) {
+		return;
+	}
+
+	if ( ! function_exists( 'WC' ) || ! WC()->session ) {
+		return;
+	}
+
+	if ( isset( $_GET['cf-redirect'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		WC()->session->set( 'nova_cf_redirect', '1' );
+		return;
+	}
+
+	if ( ! wp_doing_ajax() ) {
+		WC()->session->set( 'nova_cf_redirect', null );
+	}
+}
+add_action( 'template_redirect', 'nova_checkout_sync_cf_redirect_flag', 5 );
+
+/**
+ * CartFlows flow redirect (?cf-redirect=1), including WC checkout fragments AJAX.
+ */
+function nova_checkout_has_cf_redirect() {
+	if ( isset( $_GET['cf-redirect'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return true;
+	}
+
+	if ( function_exists( 'WC' ) && WC()->session && '1' === WC()->session->get( 'nova_cf_redirect' ) ) {
+		return true;
+	}
+
+	if ( ! empty( $_SERVER['HTTP_REFERER'] ) ) {
+		$referer = wp_unslash( $_SERVER['HTTP_REFERER'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		if ( false !== strpos( $referer, 'cf-redirect' ) ) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+/**
  * Whether CartFlows "remove product" is enabled for the current checkout step.
  */
 function nova_checkout_is_remove_product_enabled() {
+	if ( nova_checkout_has_cf_redirect() ) {
+		return false;
+	}
+
 	$checkout_id = 0;
 
 	if ( function_exists( '_get_wcf_checkout_id' ) ) {
@@ -885,6 +934,10 @@ function nova_checkout_unwrap_cartflows_product_name( $product_name ) {
  */
 function nova_checkout_order_item_name_with_image( $product_name, $cart_item, $cart_item_key ) {
 	if ( ! function_exists( 'is_checkout' ) || ! is_checkout() || is_order_received_page() ) {
+		return $product_name;
+	}
+
+	if ( nova_checkout_has_cf_redirect() ) {
 		return $product_name;
 	}
 
@@ -977,6 +1030,10 @@ function nova_checkout_is_instant_layout() {
  * Checkout: CartFlows custom coupon at the end of #order_review; hide default WC coupon UI.
  */
 function nova_checkout_coupon_field_setup() {
+	if ( nova_checkout_has_cf_redirect() ) {
+		return;
+	}
+
 	if ( ! function_exists( 'is_checkout' ) || ! is_checkout() || is_order_received_page() ) {
 		return;
 	}
