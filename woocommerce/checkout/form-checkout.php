@@ -11,6 +11,14 @@
 
 defined( 'ABSPATH' ) || exit;
 
+$nova_section_nums = function_exists( 'nova_checkout_get_section_numbers' )
+	? nova_checkout_get_section_numbers()
+	: array(
+		'personal' => '1',
+		'shipping' => '2',
+		'payment'  => '3',
+	);
+
 do_action( 'woocommerce_before_checkout_form', $checkout );
 
 if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_required() && ! is_user_logged_in() ) {
@@ -66,9 +74,11 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 				</div>
 			</section>
 
+			<?php do_action( 'nova_checkout_before_payment_section' ); ?>
+
 			<section class="nova-checkout__section nova-checkout__section--payment" aria-labelledby="nova-checkout-payment-heading">
 				<header class="nova-checkout__section-head">
-					<span class="nova-checkout__section-num" aria-hidden="true">2</span>
+					<span class="nova-checkout__section-num" aria-hidden="true"><?php echo esc_html( $nova_section_nums['payment'] ); ?></span>
 					<h2 id="nova-checkout-payment-heading" class="nova-checkout__section-title">
 						<?php echo esc_html( apply_filters( 'nova_checkout_payment_section_title', 'פרטי תשלום' ) ); ?>
 					</h2>

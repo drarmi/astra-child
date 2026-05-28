@@ -20,6 +20,7 @@
 
 /* —— Shared section card + header —— */
 .nova-checkout .nova-checkout__section--personal,
+.nova-checkout .nova-checkout__section--shipping,
 .nova-checkout .nova-checkout__section--payment {
   border: 1px solid var(--nova-checkout-border);
   border-radius: var(--nova-checkout-radius);
@@ -31,8 +32,32 @@
   margin-block: 0 16px;
 }
 
+.nova-checkout .nova-checkout__section--shipping {
+  margin-block: 0 16px;
+}
+
 .nova-checkout .nova-checkout__section--payment {
   margin-block: 0 16px;
+}
+
+.nova-checkout .nova-checkout__woocommerce-shipping ul#shipping_method {
+  border: none;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nova-checkout .nova-checkout__woocommerce-shipping ul#shipping_method li {
+  padding: 0 0 16px;
+  margin: 0;
+}
+
+.nova-checkout .nova-checkout__woocommerce-shipping ul#shipping_method li:last-child {
+  padding-bottom: 0;
+}
+
+.nova-checkout .nova-checkout__woocommerce-shipping ul#shipping_method li label {
+  margin: 0;
 }
 @media (min-width: 768px) {
   .woocommerce-page.woocommerce-checkout form #customer_details.col2-set {
@@ -581,8 +606,12 @@
   .nova-checkout__section--payment
   #wc-officeguy-cc-form
   .og-cc-cardnumber {
-  direction: ltr;
+  direction: rtl !important;
   text-align: start;
+}
+
+.nova-checkout .nova-checkout__section--payment .payment_method_officeguy .input-text, .nova-checkout .nova-checkout__section--payment .payment_method_officeguy input, .nova-checkout .nova-checkout__section--payment #wc-officeguy-cc-form .input-text, .nova-checkout .nova-checkout__section--payment #wc-officeguy-cc-form .woocommerce-select{
+  direction: rtl !important;
 }
 
 .nova-checkout
@@ -1158,6 +1187,7 @@ ul#shipping_method
 }
 @media (max-width: 520px) {
   .nova-checkout .nova-checkout__section--personal,
+  .nova-checkout .nova-checkout__section--shipping,
   .nova-checkout .nova-checkout__section--payment {
     padding: 20px 16px 16px;
   }

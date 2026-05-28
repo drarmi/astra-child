@@ -76,7 +76,12 @@ add_action(
 			);
 		}
 
-		if ( function_exists( 'is_checkout' ) && is_checkout() && ! is_order_received_page() ) {
+		if (
+			function_exists( 'is_checkout' )
+			&& is_checkout()
+			&& ! is_order_received_page()
+			&& ( ! function_exists( 'nova_checkout_has_cf_redirect' ) || ! nova_checkout_has_cf_redirect() )
+		) {
 			$checkout_deps = wp_style_is( 'woocommerce-general', 'registered' ) ? array( 'woocommerce-general' ) : array( 'astra-child-style' );
 			$checkout_css  = NOVA_CHILD_DIR . '/assets/css/nova-checkout.css';
 			wp_enqueue_style(
@@ -724,6 +729,29 @@ function nova_checkout_personal_fields_layout( $fields ) {
 add_filter( 'woocommerce_checkout_fields', 'nova_checkout_personal_fields_layout', 10000000000000001 );
 
 /**
+ * Remove "(אופציונלי)" from billing_address_2 label.
+ *
+ * Some plugins append the optional text as a separate span, so keeping it in the
+ * raw label creates a duplicate.
+ *
+ * @param array<string, array<string, array<string, mixed>>> $fields Checkout fields.
+ * @return array<string, array<string, array<string, mixed>>>
+ */
+function nova_checkout_strip_optional_from_billing_address_2_label( $fields ) {
+	if ( ! is_array( $fields ) || ! isset( $fields['billing']['billing_address_2']['label'] ) ) {
+		return $fields;
+	}
+
+	$label = (string) $fields['billing']['billing_address_2']['label'];
+	$label = trim( str_replace( '(אופציונלי)', '', $label ) );
+
+	$fields['billing']['billing_address_2']['label'] = $label;
+
+	return $fields;
+}
+add_filter( 'woocommerce_checkout_fields', 'nova_checkout_strip_optional_from_billing_address_2_label', 10000000000000002 );
+
+/**
  * Drop display-only country field from POST; keep billing country as IL.
  *
  * @param array<string, mixed> $data Posted checkout data.
@@ -834,10 +862,6 @@ function nova_checkout_has_cf_redirect() {
 		return true;
 	}
 
-	if ( function_exists( 'WC' ) && WC()->session && '1' === WC()->session->get( 'nova_cf_redirect' ) ) {
-		return true;
-	}
-
 	if ( ! empty( $_SERVER['HTTP_REFERER'] ) ) {
 		$referer = wp_unslash( $_SERVER['HTTP_REFERER'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		if ( false !== strpos( $referer, 'cf-redirect' ) ) {
@@ -847,6 +871,66 @@ function nova_checkout_has_cf_redirect() {
 
 	return false;
 }
+
+/**
+ * Checkout page context (WC checkout or CartFlows checkout step).
+ */
+function nova_checkout_is_checkout_context() {
+	if ( function_exists( 'is_order_received_page' ) && is_order_received_page() ) {
+		return false;
+	}
+
+	if ( function_exists( 'is_checkout' ) && is_checkout() ) {
+		return true;
+	}
+
+	return function_exists( '_is_wcf_checkout_type' ) && _is_wcf_checkout_type();
+}
+
+/**
+ * Checkout page with ?cf-redirect (CartFlows flow) — wp_enqueue often does not print CSS on this template.
+ */
+function nova_should_print_checkout_flow_style() {
+	if ( ! nova_checkout_has_cf_redirect() ) {
+		return false;
+	}
+
+	if ( function_exists( 'is_order_received_page' ) && is_order_received_page() ) {
+		return false;
+	}
+
+	if ( function_exists( 'is_checkout' ) && is_checkout() ) {
+		return true;
+	}
+
+	return function_exists( '_is_wcf_checkout_type' ) && _is_wcf_checkout_type();
+}
+
+/**
+ * Print flow checkout CSS in footer (bypasses WP Styles API on CartFlows checkout-page).
+ */
+function nova_print_checkout_flow_style_in_footer() {
+	if ( ! nova_should_print_checkout_flow_style() ) {
+		return;
+	}
+
+	$flow_css = NOVA_CHILD_DIR . '/assets/css/nova-checkout-flow.css';
+	if ( ! is_file( $flow_css ) ) {
+		return;
+	}
+
+	$href = add_query_arg(
+		'ver',
+		(string) filemtime( $flow_css ),
+		NOVA_CHILD_URI . '/assets/css/nova-checkout-flow.css'
+	);
+
+	printf(
+		'<link rel="stylesheet" id="enjoy-nova-checkout-flow-css" href="%s" media="all" />' . "\n",
+		esc_url( $href )
+	);
+}
+add_action( 'wp_footer', 'nova_print_checkout_flow_style_in_footer', 5 );
 
 /**
  * Whether CartFlows "remove product" is enabled for the current checkout step.
@@ -1005,6 +1089,272 @@ add_action(
 	},
 	100
 );
+
+/**
+ * Unhook CartFlows plain .wcf-customer-shipping (registered on shortcode init, after wp:100).
+ */
+function nova_checkout_remove_cartflows_default_shipping() {
+	if ( ! class_exists( 'Cartflows_Checkout_Markup' ) ) {
+		return;
+	}
+
+	if ( ! function_exists( 'is_checkout' ) || ! is_checkout() || is_order_received_page() ) {
+		return;
+	}
+
+	remove_action(
+		'woocommerce_checkout_after_customer_details',
+		array( Cartflows_Checkout_Markup::get_instance(), 'add_custom_shipping_section' ),
+		10
+	);
+}
+add_action( 'cartflows_checkout_before_shortcode', 'nova_checkout_remove_cartflows_default_shipping', 20 );
+add_action( 'cartflows_elementor_before_checkout_shortcode', 'nova_checkout_remove_cartflows_default_shipping', 20 );
+add_action( 'cartflows_gutenberg_before_checkout_shortcode', 'nova_checkout_remove_cartflows_default_shipping', 20 );
+add_action( 'cartflows_bb_before_checkout_shortcode', 'nova_checkout_remove_cartflows_default_shipping', 20 );
+add_action( 'wp', 'nova_checkout_remove_cartflows_default_shipping', 999 );
+
+/**
+ * CartFlows checkout markup for shipping (child cartflows template + fragment selectors).
+ */
+function nova_checkout_uses_cartflows_shipping_markup() {
+	if ( function_exists( '_is_wcf_checkout_type' ) && ( _is_wcf_checkout_type() || ( function_exists( '_is_wcf_doing_checkout_ajax' ) && _is_wcf_doing_checkout_ajax() ) ) ) {
+		return true;
+	}
+
+	return nova_checkout_has_cf_redirect();
+}
+
+/**
+ * Whether to show Nova numbered shipping section (standard WC or CartFlows).
+ */
+function nova_checkout_should_display_shipping_section() {
+	if ( ! nova_checkout_is_checkout_context() ) {
+		return false;
+	}
+
+	if ( ! function_exists( 'WC' ) || ! WC()->cart || ! WC()->cart->needs_shipping() || ! WC()->cart->show_shipping() ) {
+		return false;
+	}
+
+	if ( nova_checkout_uses_cartflows_shipping_markup() ) {
+		return (bool) apply_filters( 'cartflows_should_render_custom_shipping', true );
+	}
+
+	return true;
+}
+
+/**
+ * @deprecated Use nova_checkout_should_display_shipping_section().
+ */
+function nova_checkout_should_show_shipping_section() {
+	return nova_checkout_should_display_shipping_section();
+}
+
+/**
+ * Section step numbers: payment is 2 when shipping is hidden, otherwise 3.
+ *
+ * @return array{personal:string,shipping:string,payment:string}
+ */
+function nova_checkout_get_section_numbers() {
+	static $numbers = null;
+
+	if ( null !== $numbers ) {
+		return $numbers;
+	}
+
+	$has_shipping = nova_checkout_should_display_shipping_section();
+
+	$numbers = array(
+		'personal' => '1',
+		'shipping' => $has_shipping ? '2' : '',
+		'payment'  => $has_shipping ? '3' : '2',
+	);
+
+	return apply_filters( 'nova_checkout_section_numbers', $numbers );
+}
+
+/**
+ * Hebrew shipping section title (CartFlows package label fallback).
+ *
+ * @param string $package_name Default package name.
+ * @param int    $index        Package index.
+ * @return string
+ */
+function nova_checkout_shipping_package_name_he( $package_name, $index ) {
+	if ( ! nova_checkout_is_checkout_context() ) {
+		return $package_name;
+	}
+
+	$title = (string) apply_filters( 'nova_checkout_shipping_section_title', 'משלוח' );
+
+	if ( $index > 0 ) {
+		return $title . ' ' . ( $index + 1 );
+	}
+
+	return $title;
+}
+add_filter( 'woocommerce_shipping_package_name', 'nova_checkout_shipping_package_name_he', 20, 2 );
+
+/**
+ * Render standard WooCommerce shipping methods (child checkout template).
+ */
+function nova_checkout_render_standard_shipping_html() {
+	if ( ! function_exists( 'WC' ) || ! WC()->cart ) {
+		return;
+	}
+
+	$packages = WC()->shipping()->get_packages();
+	if ( empty( $packages ) ) {
+		WC()->cart->calculate_totals();
+		$packages = WC()->shipping()->get_packages();
+	}
+
+	$first = true;
+	foreach ( $packages as $i => $package ) {
+		$chosen_method = isset( WC()->session->chosen_shipping_methods[ $i ] ) ? WC()->session->chosen_shipping_methods[ $i ] : '';
+		$product_names = array();
+
+		if ( count( $packages ) > 1 ) {
+			foreach ( $package['contents'] as $item_id => $values ) {
+				$product_names[ $item_id ] = $values['data']->get_name() . ' &times;' . $values['quantity'];
+			}
+			$product_names = apply_filters( 'woocommerce_shipping_package_details_array', $product_names, $package );
+		}
+
+		wc_get_template(
+			'checkout/nova-shipping-methods.php',
+			array(
+				'package'                  => $package,
+				'available_methods'        => $package['rates'],
+				'show_package_details'     => count( $packages ) > 1,
+				'show_shipping_calculator' => is_cart() && apply_filters( 'woocommerce_shipping_show_shipping_calculator', $first, $i, $package ),
+				'package_details'          => implode( ', ', $product_names ),
+				'package_name'             => apply_filters( 'woocommerce_shipping_package_name', ( ( $i + 1 ) > 1 ) ? sprintf( _x( 'Shipping %d', 'shipping packages', 'woocommerce' ), ( $i + 1 ) ) : _x( 'Shipping', 'shipping packages', 'woocommerce' ), $i, $package ),
+				'index'                    => $i,
+				'chosen_method'            => $chosen_method,
+				'formatted_destination'    => WC()->countries->get_formatted_address( $package['destination'], ', ' ),
+				'has_calculated_shipping'  => WC()->customer->has_calculated_shipping(),
+			)
+		);
+
+		do_action( 'woocommerce_review_order_after_shipping' );
+
+		$first = false;
+	}
+}
+
+/**
+ * Render CartFlows shipping methods HTML (child theme template).
+ */
+function nova_checkout_render_shipping_methods_html() {
+	if ( ! function_exists( 'WC' ) || ! WC()->cart ) {
+		return;
+	}
+
+	$template = NOVA_CHILD_DIR . '/cartflows/checkout/shipping-methods.php';
+	if ( ! is_file( $template ) ) {
+		return;
+	}
+
+	$packages = WC()->shipping()->get_packages();
+	if ( empty( $packages ) ) {
+		WC()->cart->calculate_totals();
+		$packages = WC()->shipping()->get_packages();
+	}
+
+	$first = true;
+	foreach ( $packages as $i => $package ) {
+		$chosen_method = isset( WC()->session->chosen_shipping_methods[ $i ] ) ? WC()->session->chosen_shipping_methods[ $i ] : '';
+		$product_names = array();
+
+		if ( count( $packages ) > 1 ) {
+			foreach ( $package['contents'] as $item_id => $values ) {
+				$product_names[ $item_id ] = $values['data']->get_name() . ' &times;' . $values['quantity'];
+			}
+			$product_names = apply_filters( 'woocommerce_shipping_package_details_array', $product_names, $package );
+		}
+
+		include $template;
+
+		do_action( 'woocommerce_review_order_after_shipping' );
+
+		$first = false;
+	}
+}
+
+/**
+ * CartFlows AJAX replaces .wcf-customer-shipping with plugin markup (h3 title) — keep Nova header intact.
+ *
+ * @param array $fragments Checkout fragments.
+ * @return array
+ */
+function nova_checkout_filter_shipping_fragments( $fragments ) {
+	if ( ! nova_checkout_should_display_shipping_section() ) {
+		return $fragments;
+	}
+
+	if ( nova_checkout_uses_cartflows_shipping_markup() ) {
+		unset( $fragments['.wcf-embed-checkout-form .wcf-customer-shipping'] );
+
+		ob_start();
+		nova_checkout_render_shipping_methods_html();
+		$shipping_html = ob_get_clean();
+
+		if ( $shipping_html ) {
+			$fragments['.wcf-embed-checkout-form .wcf-shipping-methods-wrapper'] = $shipping_html;
+		}
+
+		return $fragments;
+	}
+
+	ob_start();
+	nova_checkout_render_standard_shipping_html();
+	$shipping_html = ob_get_clean();
+
+	if ( $shipping_html ) {
+		$fragments['.nova-checkout__section--shipping .nova-checkout__shipping-inner'] = $shipping_html;
+	}
+
+	return $fragments;
+}
+add_filter( 'woocommerce_update_order_review_fragments', 'nova_checkout_filter_shipping_fragments', 99 );
+
+/**
+ * Shipping section with step badge (between personal details and payment).
+ */
+function nova_checkout_render_shipping_section() {
+	if ( ! nova_checkout_should_display_shipping_section() ) {
+		return;
+	}
+
+	$section_nums = nova_checkout_get_section_numbers();
+	$section_num  = (string) apply_filters( 'nova_checkout_shipping_section_num', $section_nums['shipping'] );
+	$title        = (string) apply_filters( 'nova_checkout_shipping_section_title', 'משלוח' );
+	$use_wcf      = nova_checkout_uses_cartflows_shipping_markup();
+	?>
+	<section class="nova-checkout__section nova-checkout__section--shipping" aria-labelledby="nova-checkout-shipping-heading">
+		<header class="nova-checkout__section-head">
+			<span class="nova-checkout__section-num" aria-hidden="true"><?php echo esc_html( $section_num ); ?></span>
+			<h2 id="nova-checkout-shipping-heading" class="nova-checkout__section-title">
+				<?php echo esc_html( $title ); ?>
+			</h2>
+		</header>
+		<?php if ( $use_wcf ) : ?>
+		<div class="nova-checkout__section-body wcf-customer-shipping">
+			<?php nova_checkout_render_shipping_methods_html(); ?>
+		</div>
+		<?php else : ?>
+		<div class="nova-checkout__section-body nova-checkout__woocommerce-shipping">
+			<div class="nova-checkout__shipping-inner">
+				<?php nova_checkout_render_standard_shipping_html(); ?>
+			</div>
+		</div>
+		<?php endif; ?>
+	</section>
+	<?php
+}
+add_action( 'nova_checkout_before_payment_section', 'nova_checkout_render_shipping_section', 10 );
 
 /**
  * Whether the current CartFlows checkout step uses the instant layout.

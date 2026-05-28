@@ -1,0 +1,757 @@
+/**
+ * Nova checkout — CartFlows flow (?cf-redirect): section layout + payment block.
+ * Loaded instead of nova-checkout.css when nova_checkout_has_cf_redirect().
+ */
+
+
+.wcf-embed-checkout-form .nova-checkout,
+.nova-checkout {
+  --nova-checkout-accent: #019594;
+  --nova-checkout-accent-hover: #348886;
+  --nova-checkout-border: #e5e6ea;
+  --nova-checkout-input-border: #d4d4d4;
+  --nova-checkout-text: #404040;
+  --nova-checkout-muted: #6b7280;
+  --nova-checkout-radius: 12px;
+  --nova-checkout-input-radius: 4px;
+}
+
+.elementor-10979 .elementor-element.elementor-element-a504e38 .wcf-embed-checkout-form .woocommerce form .form-row input.input-text::placeholder, .elementor-10979 .elementor-element.elementor-element-a504e38 .wcf-embed-checkout-form .woocommerce form .form-row input.input-text, .elementor-10979 .elementor-element.elementor-element-a504e38 .wcf-embed-checkout-form .woocommerce form .form-row textarea, .elementor-10979 .elementor-element.elementor-element-a504e38 .wcf-embed-checkout-form .select2-container--default .select2-selection--single, .elementor-10979 .elementor-element.elementor-element-a504e38 .wcf-embed-checkout-form .woocommerce form .form-row select.select, .elementor-10979 .elementor-element.elementor-element-a504e38 .wcf-embed-checkout-form .woocommerce .col2-set .col-1, .elementor-10979 .elementor-element.elementor-element-a504e38 .wcf-embed-checkout-form .woocommerce .col2-set .col-2, .elementor-10979 .elementor-element.elementor-element-a504e38 .wcf-embed-checkout-form .woocommerce form p.form-row label, .elementor-10979 .elementor-element.elementor-element-a504e38 .wcf-embed-checkout-form .woocommerce #payment [type="radio"]:checked + label, .elementor-10979 .elementor-element.elementor-element-a504e38 .wcf-embed-checkout-form .woocommerce #payment [type="radio"]:not(:checked) + label, .elementor-10979 .elementor-element.elementor-element-a504e38 .wcf-embed-checkout-form .woocommerce form .form-row select {
+  direction: rtl;
+}
+
+form.checkout.woocommerce-checkout.nova-checkout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+  align-items: start;
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+.nova-checkout__section.nova-checkout__section--personal .wcf-col-1.col-1,
+.nova-checkout__section.nova-checkout__section--personal .wcf-col-2.col-2 {
+  padding: 0 !important;
+}
+.wcf-shipping-methods-wrapper {
+  padding: 0 !important;
+}
+
+.wcf-embed-checkout-form .nova-checkout .nova-checkout__section--personal,
+.wcf-embed-checkout-form .nova-checkout .nova-checkout__section--payment,
+.wcf-embed-checkout-form
+  .nova-checkout
+  .wcf-order-wrap.nova-checkout__section--order,
+.wcf-embed-checkout-form .nova-checkout .nova-checkout__section--order,
+.nova-checkout .nova-checkout__section--personal,
+.nova-checkout .nova-checkout__section--payment,
+.nova-checkout .wcf-order-wrap.nova-checkout__section--order,
+.nova-checkout .nova-checkout__section--order {
+  width: 100%;
+  grid-column-start: 2;
+  grid-row: 1;
+  @media (max-width: 768px) {
+    grid-column-start: unset;
+  }
+}
+
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__customer#customer_details,
+.wcf-embed-checkout-form
+  .nova-checkout
+  #customer_details.nova-checkout__customer,
+.nova-checkout .nova-checkout__customer#customer_details {
+  display: flex;
+  flex-direction: column;
+  float: none;
+  width: 100%;
+  max-width: 100%;
+  padding: 0;
+  margin-block: 0;
+  grid-row: 1;
+  @media (max-width: 768px) {
+    grid-row: 2;
+  }
+}
+
+/* Section cards */
+.wcf-embed-checkout-form .nova-checkout .nova-checkout__section--shipping,
+.wcf-embed-checkout-form .nova-checkout .nova-checkout__section--personal,
+.wcf-embed-checkout-form .nova-checkout .nova-checkout__section--payment,
+.wcf-embed-checkout-form
+  .nova-checkout
+  .wcf-order-wrap.nova-checkout__section--order,
+.wcf-embed-checkout-form .nova-checkout .nova-checkout__section--order,
+.nova-checkout .nova-checkout__section--shipping,
+.nova-checkout .nova-checkout__section--personal,
+.nova-checkout .nova-checkout__section--payment,
+.nova-checkout .wcf-order-wrap.nova-checkout__section--order,
+.nova-checkout .nova-checkout__section--order {
+  border: 1px solid var(--nova-checkout-border);
+  border-radius: var(--nova-checkout-radius);
+  background: #ffffff;
+  padding: 24px;
+}
+
+.wcf-embed-checkout-form .nova-checkout .nova-checkout__section--personal,
+.nova-checkout .nova-checkout__section--personal {
+  margin-block: 0 16px;
+}
+
+.wcf-embed-checkout-form .nova-checkout .nova-checkout__section--shipping,
+.nova-checkout .nova-checkout__section--shipping {
+  margin-block: 0 16px;
+}
+
+/* CartFlows AJAX may inject duplicate h3.wcf-shipping-methods-title inside the wrapper. */
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--shipping
+  .wcf-shipping-methods-wrapper
+  .wcf-shipping-methods-title,
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--shipping
+  .wcf-shipping-methods-wrapper
+  > h3,
+.nova-checkout
+  .nova-checkout__section--shipping
+  .wcf-shipping-methods-wrapper
+  .wcf-shipping-methods-title,
+.nova-checkout
+  .nova-checkout__section--shipping
+  .wcf-shipping-methods-wrapper
+  > h3 {
+  display: none !important;
+}
+
+.wcf-embed-checkout-form .nova-checkout .nova-checkout__section--payment,
+.nova-checkout .nova-checkout__section--payment {
+  margin-block: 0 16px;
+}
+
+.wcf-embed-checkout-form
+  .nova-checkout
+  .wcf-order-wrap.nova-checkout__section--order,
+.wcf-embed-checkout-form .nova-checkout .nova-checkout__section--order,
+.nova-checkout .wcf-order-wrap.nova-checkout__section--order,
+.nova-checkout .nova-checkout__section--order {
+  margin-block: 0;
+}
+
+/* Section header + step badge */
+.wcf-embed-checkout-form .nova-checkout .nova-checkout__section-head,
+.nova-checkout .nova-checkout__section-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 32px;
+}
+
+.wcf-embed-checkout-form .nova-checkout .nova-checkout__section-num,
+.nova-checkout .nova-checkout__section-num {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--nova-checkout-text);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.wcf-embed-checkout-form .nova-checkout .nova-checkout__section-title,
+.nova-checkout .nova-checkout__section-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #000000;
+}
+
+.wcf-embed-checkout-form .nova-checkout .wcf-order-wrap #order_review_heading,
+.nova-checkout .wcf-order-wrap #order_review_heading {
+  margin: 0 0 24px;
+  padding: 0;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #000000;
+  border: 0;
+}
+
+/* —— Payment section —— */
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  #payment,
+.nova-checkout .nova-checkout__section--payment #payment {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  .wc_payment_methods,
+.nova-checkout .nova-checkout__section--payment .wc_payment_methods {
+  padding: 0;
+  margin: 0;
+  border: 0;
+  list-style: none;
+}
+
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  .wc_payment_methods::before,
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  .wc_payment_methods::after,
+.nova-checkout .nova-checkout__section--payment .wc_payment_methods::before,
+.nova-checkout .nova-checkout__section--payment .wc_payment_methods::after {
+  display: none;
+}
+
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  .wc_payment_methods
+  > li
+  > input[type="radio"],
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  .wc_payment_methods
+  > li
+  > label,
+.nova-checkout
+  .nova-checkout__section--payment
+  .wc_payment_methods
+  > li
+  > input[type="radio"],
+.nova-checkout
+  .nova-checkout__section--payment
+  .wc_payment_methods
+  > li
+  > label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  .payment_box,
+.nova-checkout .nova-checkout__section--payment .payment_box {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  .payment_box::before,
+.nova-checkout .nova-checkout__section--payment .payment_box::before {
+  display: none !important;
+}
+
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form,
+.nova-checkout .nova-checkout__section--payment #wc-officeguy-cc-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 16px;
+  row-gap: 0;
+  margin: 0 !important;
+  padding: 0;
+  border: 0;
+}
+
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  .form-row,
+.nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  .form-row {
+  float: none;
+  width: 100%;
+  margin: 0 0 20px !important;
+  padding: 0;
+}
+
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  label,
+.nova-checkout .nova-checkout__section--payment #wc-officeguy-cc-form label {
+  display: block;
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--nova-checkout-text);
+  padding-inline-start: 0;
+  text-align: start;
+  position: relative;
+  opacity: 1;
+}
+
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  .payment_method_officeguy
+  .input-text,
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  .input-text,
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  .woocommerce-select,
+.nova-checkout
+  .nova-checkout__section--payment
+  .payment_method_officeguy
+  .input-text,
+.nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  .input-text,
+.nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  .woocommerce-select {
+  display: block;
+  width: 100%;
+  max-width: none !important;
+  height: 44px;
+  padding: 10px 12px;
+  margin: 0;
+  border: 1px solid var(--nova-checkout-input-border) !important;
+  border-radius: var(--nova-checkout-input-radius);
+  background: #ffffff;
+  color: #000000;
+  font-size: 14px;
+  line-height: 1.4;
+  box-shadow: none;
+  box-sizing: border-box;
+}
+
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  .og-cc-cardnumber,
+.nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  .og-cc-cardnumber {
+  direction: rtl !important;
+  text-align: start;
+}
+
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  .og-expiration,
+.nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  .og-expiration {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  direction: ltr;
+  width: 100%;
+}
+
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  .og-errors,
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  .og-clear,
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  .form-row:has(#og-ccnum),
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  .form-row:has(#og-citizenid),
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  .form-row:has(#og-cvv),
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  .form-row.woocommerce-SavedPaymentMethods-saveNew,
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  > .form-row:not(:has(#og-expmonth)):not(:has(#og-paymentscount)),
+.nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  .og-errors,
+.nova-checkout .nova-checkout__section--payment #wc-officeguy-cc-form .og-clear,
+.nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  .form-row:has(#og-ccnum),
+.nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  .form-row:has(#og-citizenid),
+.nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  .form-row:has(#og-cvv),
+.nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  .form-row.woocommerce-SavedPaymentMethods-saveNew,
+.nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  > .form-row:not(:has(#og-expmonth)):not(:has(#og-paymentscount)) {
+  grid-column: 1 / -1;
+}
+
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  .form-row:has(#og-expmonth),
+.nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  .form-row:has(#og-expmonth) {
+  grid-column: 1;
+  position: relative;
+  padding-inline-end: 16px;
+  @media (max-width: 768px) {
+    max-width: 220px;
+  }
+}
+.form-row:has(#og-expmonth)::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  inset-inline-end: 0;
+  width: 1px;
+  height: 100%;
+  background: var(--nova-checkout-input-border);
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+.form-row:has(#og-paymentscount){
+  max-width: 101px;
+}
+
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  .form-row:has(#og-paymentscount),
+.nova-checkout
+  .nova-checkout__section--payment
+  #wc-officeguy-cc-form
+  .form-row:has(#og-paymentscount) {
+  grid-column: 2;
+}
+
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  #payment
+  .form-row.place-order,
+.nova-checkout .nova-checkout__section--payment #payment .form-row.place-order {
+  margin: 20px 0 0;
+  padding: 0;
+  grid-column: 1 / -1;
+}
+
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  #payment
+  #place_order,
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  #payment
+  button[name="woocommerce_checkout_place_order"],
+.nova-checkout .nova-checkout__section--payment #payment #place_order,
+.nova-checkout
+  .nova-checkout__section--payment
+  #payment
+  button[name="woocommerce_checkout_place_order"] {
+  display: block;
+  width: 100%;
+  float: none;
+  margin: 0;
+  padding: 14px 20px;
+  border: 0;
+  border-radius: var(--nova-checkout-input-radius);
+  background: var(--nova-checkout-accent) !important;
+  color: #ffffff !important;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.4;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  #payment
+  #place_order:hover,
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  #payment
+  button[name="woocommerce_checkout_place_order"]:hover,
+.nova-checkout .nova-checkout__section--payment #payment #place_order:hover,
+.nova-checkout
+  .nova-checkout__section--payment
+  #payment
+  button[name="woocommerce_checkout_place_order"]:hover {
+  background: var(--nova-checkout-accent-hover) !important;
+  color: #ffffff !important;
+}
+
+.wcf-embed-checkout-form .nova-checkout .nova-checkout__payment-footer,
+.nova-checkout .nova-checkout__payment-footer {
+  margin-top: 12px;
+  text-align: center;
+}
+
+.wcf-embed-checkout-form .nova-checkout .nova-checkout__payment-secure,
+.nova-checkout .nova-checkout__payment-secure {
+  margin: 0 0 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--nova-checkout-text);
+}
+
+.wcf-embed-checkout-form .nova-checkout .nova-checkout__payment-icons,
+.nova-checkout .nova-checkout__payment-icons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.wcf-embed-checkout-form .nova-checkout .nova-checkout__payment-icons img,
+.nova-checkout .nova-checkout__payment-icons img {
+  display: block;
+  height: 24px;
+  width: auto;
+  max-width: 48px;
+  object-fit: contain;
+}
+
+.wcf-embed-checkout-form
+  .nova-checkout
+  .nova-checkout__section--payment
+  .payment_method_officeguy
+  .payment_box
+  > p:not(.form-row),
+.nova-checkout
+  .nova-checkout__section--payment
+  .payment_method_officeguy
+  .payment_box
+  > p:not(.form-row) {
+  display: none;
+  margin: 0;
+}
+
+@media (max-width: 520px) {
+  .wcf-embed-checkout-form .nova-checkout .nova-checkout__section--personal,
+  .wcf-embed-checkout-form .nova-checkout .nova-checkout__section--payment,
+  .wcf-embed-checkout-form
+    .nova-checkout
+    .wcf-order-wrap.nova-checkout__section--order,
+  .nova-checkout .nova-checkout__section--personal,
+  .nova-checkout .nova-checkout__section--payment,
+  .nova-checkout .wcf-order-wrap.nova-checkout__section--order {
+    padding: 20px 16px 16px;
+  }
+
+  .wcf-embed-checkout-form
+    .nova-checkout
+    .nova-checkout__section--payment
+    #wc-officeguy-cc-form,
+  .nova-checkout .nova-checkout__section--payment #wc-officeguy-cc-form {
+    grid-template-columns: 1fr;
+  }
+
+  .wcf-embed-checkout-form
+    .nova-checkout
+    .nova-checkout__section--payment
+    #wc-officeguy-cc-form
+    .form-row:has(#og-expmonth),
+  .wcf-embed-checkout-form
+    .nova-checkout
+    .nova-checkout__section--payment
+    #wc-officeguy-cc-form
+    .form-row:has(#og-paymentscount),
+  .nova-checkout
+    .nova-checkout__section--payment
+    #wc-officeguy-cc-form
+    .form-row:has(#og-expmonth),
+  .nova-checkout
+    .nova-checkout__section--payment
+    #wc-officeguy-cc-form
+    .form-row:has(#og-paymentscount) {
+    grid-column: 1 / -1;
+    padding-inline-end: 0;
+  }
+}
+
+/* CartFlows \e600 needs cartflows-icon; plugin sets width:6px and clips glyph into “stripes”. */
+.wcf-embed-checkout-form
+  .woocommerce
+  .woocommerce-checkout
+  input[type="checkbox"],
+.wcf-embed-checkout-form
+  .woocommerce
+  .woocommerce-billing-fields
+  [type="checkbox"],
+.wcf-embed-checkout-form .woocommerce #payment input[type="checkbox"],
+.wcf-embed-checkout-form
+  .woocommerce
+  .woocommerce-shipping-fields
+  [type="checkbox"],
+.wcf-embed-checkout-form
+  .woocommerce
+  .woocommerce-account-fields
+  input[type="checkbox"] {
+  position: relative;
+}
+
+.wcf-embed-checkout-form
+  .woocommerce
+  .woocommerce-checkout
+  input[type="checkbox"]:checked::before,
+.wcf-embed-checkout-form
+  .woocommerce
+  .woocommerce-billing-fields
+  [type="checkbox"]:checked::before,
+.wcf-embed-checkout-form
+  .woocommerce
+  #payment
+  input[type="checkbox"]:checked::before,
+.wcf-embed-checkout-form
+  .woocommerce
+  .woocommerce-shipping-fields
+  [type="checkbox"]:checked::before,
+.wcf-embed-checkout-form
+  .woocommerce
+  .woocommerce-account-fields
+  input[type="checkbox"]:checked::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute;
+  top: 1px;
+  inset-inline-start: 5px;
+  width: 5px !important;
+  height: 10px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  float: none !important;
+  font: none !important;
+  line-height: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: solid var(--wcf-primary-color, var(--nova-checkout-accent, #019594));
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  box-sizing: border-box;
+  color: transparent !important;
+}
+
+.wcf-embed-checkout-form .woocommerce form .wcf-shipping-methods-wrapper {
+  width: 100%;
+  float: none;
+  padding: 0;
+}
+.wcf-embed-checkout-form
+  .woocommerce
+  form
+  .wcf-shipping-methods-wrapper
+  ul#shipping_method {
+  border: none;
+}
+.wcf-embed-checkout-form
+  .woocommerce
+  form
+  .wcf-shipping-methods-wrapper
+  ul#shipping_method
+  li {
+  padding: 0 0 16px;
+}
+.wcf-embed-checkout-form
+  .woocommerce
+  form
+  .wcf-shipping-methods-wrapper
+  ul#shipping_method
+  li
+  label {
+  margin: 0;
+}
+
+.wcf-embed-checkout-form .woocommerce-checkout #payment ul.payment_methods {
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+}
+
+#billing_fields_heading {
+  display: none;
+}
