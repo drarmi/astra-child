@@ -10,23 +10,9 @@ defined( 'ABSPATH' ) || exit;
 define( 'NOVA_CHILD_DIR', get_stylesheet_directory() );
 define( 'NOVA_CHILD_URI', get_stylesheet_directory_uri() );
 
-// /**
-//  * ACF Local JSON: load/save field groups from this theme folder.
-//  */
-// add_filter(
-// 	'acf/settings/save_json',
-// 	function () {
-// 		return NOVA_CHILD_DIR . '/acf-json';
-// 	}
-// );
-
-// add_filter(
-// 	'acf/settings/load_json',
-// 	function ( $paths ) {
-// 		$paths[] = NOVA_CHILD_DIR . '/acf-json';
-// 		return $paths;
-// 	}
-// );
+if(file_exists(NOVA_CHILD_DIR . '/includes/nova-rotating-banner.php')) {
+    require_once NOVA_CHILD_DIR . '/includes/nova-rotating-banner.php';
+}
 
 /**
  * Enqueue parent + child styles.

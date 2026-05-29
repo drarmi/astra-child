@@ -1,0 +1,69 @@
+/**
+ * Above Header — rotating messages banner.
+ */
+
+.nova-rotating-banner {
+	--nova-banner-color: inherit;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	background-color: transparent;
+	color: var(--nova-banner-color);
+}
+
+.nova-rotating-banner__track {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	min-height: 1.2em;
+	overflow: hidden;
+}
+
+.nova-rotating-banner__item {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5em;
+	width: 100%;
+	line-height: 1.2;
+	text-align: center;
+}
+
+.nova-rotating-banner--has-rotation .nova-rotating-banner__item {
+	position: absolute;
+	inset: 0;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.45s ease, visibility 0.45s ease;
+	pointer-events: none;
+}
+
+.nova-rotating-banner--has-rotation .nova-rotating-banner__item.is-active {
+	position: relative;
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto;
+}
+
+.nova-rotating-banner__icon {
+	flex: 0 0 auto;
+	width: 1.25em;
+	height: 1.25em;
+	object-fit: contain;
+}
+
+.nova-rotating-banner__text {
+	flex: 0 1 auto;
+	font-size: 13px;
+	font-weight: 300;
+	font-family: "Rubik", sans-serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.nova-rotating-banner--has-rotation .nova-rotating-banner__item {
+		transition: none;
+	}
+}

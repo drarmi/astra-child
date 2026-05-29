@@ -1,0 +1,161 @@
+{
+    "key": "group_nova_rotating_banner",
+    "title": "Top Announcement Bar",
+    "fields": [
+        {
+            "key": "field_nova_rotating_banner_enabled",
+            "label": "Enable banner",
+            "name": "nova_rotating_banner_enabled",
+            "aria-label": "",
+            "type": "true_false",
+            "instructions": "Show the rotating announcement bar in the Above Header (shortcode: [nova_rotating_banner]).",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "message": "",
+            "default_value": 1,
+            "allow_in_bindings": 0,
+            "ui_on_text": "On",
+            "ui_off_text": "Off",
+            "ui": 1
+        },
+        {
+            "key": "field_nova_rotating_banner_interval",
+            "label": "Rotation interval (seconds)",
+            "name": "nova_rotating_banner_interval",
+            "aria-label": "",
+            "type": "number",
+            "instructions": "How long each message is shown before switching. Allowed range: 5–7 seconds.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": 6,
+            "min": 5,
+            "max": 7,
+            "allow_in_bindings": 0,
+            "placeholder": "",
+            "step": 1,
+            "prepend": "",
+            "append": "sec"
+        },
+        {
+            "key": "field_nova_rotating_banner_text_color",
+            "label": "Text color",
+            "name": "nova_rotating_banner_text_color",
+            "aria-label": "",
+            "type": "color_picker",
+            "instructions": "Text and icon area color.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "50",
+                "class": "",
+                "id": ""
+            },
+            "default_value": "#ffffff",
+            "enable_opacity": 0,
+            "return_format": "string",
+            "allow_in_bindings": 0
+        },
+        {
+            "key": "field_nova_rotating_banner_content",
+            "label": "Banner rows",
+            "name": "nova_rotating_banner_content",
+            "aria-label": "",
+            "type": "repeater",
+            "instructions": "Each row = one slide: text + optional image. Add 2+ rows for auto-rotation.",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "layout": "row",
+            "pagination": 0,
+            "min": 0,
+            "max": 0,
+            "collapsed": "field_nova_rotating_banner_row_text",
+            "button_label": "Add row",
+            "rows_per_page": 20,
+            "sub_fields": [
+                {
+                    "key": "field_nova_rotating_banner_row_text",
+                    "label": "Text",
+                    "name": "text",
+                    "aria-label": "",
+                    "type": "text",
+                    "instructions": "",
+                    "required": 1,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "70",
+                        "class": "",
+                        "id": ""
+                    },
+                    "default_value": "",
+                    "maxlength": "",
+                    "allow_in_bindings": 0,
+                    "placeholder": "",
+                    "prepend": "",
+                    "append": "",
+                    "parent_repeater": "field_nova_rotating_banner_content"
+                },
+                {
+                    "key": "field_nova_rotating_banner_row_image",
+                    "label": "Image",
+                    "name": "image",
+                    "aria-label": "",
+                    "type": "image",
+                    "instructions": "Optional icon or image before the text.",
+                    "required": 0,
+                    "conditional_logic": 0,
+                    "wrapper": {
+                        "width": "30",
+                        "class": "",
+                        "id": ""
+                    },
+                    "return_format": "array",
+                    "library": "all",
+                    "min_width": "",
+                    "min_height": "",
+                    "min_size": "",
+                    "max_width": "",
+                    "max_height": "",
+                    "max_size": "",
+                    "mime_types": "svg,png,jpg,jpeg,webp,gif",
+                    "allow_in_bindings": 0,
+                    "preview_size": "thumbnail",
+                    "parent_repeater": "field_nova_rotating_banner_content"
+                }
+            ]
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "options_page",
+                "operator": "==",
+                "value": "top-announcement-bar"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "Rotating messages for Astra Above Header. Render with [nova_rotating_banner].",
+    "show_in_rest": 0,
+    "modified": 1748541600
+}
