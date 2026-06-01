@@ -3,7 +3,6 @@
  * Loaded instead of nova-checkout.css when nova_checkout_has_cf_redirect().
  */
 
-
 .wcf-embed-checkout-form .nova-checkout,
 .nova-checkout {
   --nova-checkout-accent: #019594;
@@ -16,7 +15,79 @@
   --nova-checkout-input-radius: 4px;
 }
 
-.elementor-10979 .elementor-element.elementor-element-a504e38 .wcf-embed-checkout-form .woocommerce form .form-row input.input-text::placeholder, .elementor-10979 .elementor-element.elementor-element-a504e38 .wcf-embed-checkout-form .woocommerce form .form-row input.input-text, .elementor-10979 .elementor-element.elementor-element-a504e38 .wcf-embed-checkout-form .woocommerce form .form-row textarea, .elementor-10979 .elementor-element.elementor-element-a504e38 .wcf-embed-checkout-form .select2-container--default .select2-selection--single, .elementor-10979 .elementor-element.elementor-element-a504e38 .wcf-embed-checkout-form .woocommerce form .form-row select.select, .elementor-10979 .elementor-element.elementor-element-a504e38 .wcf-embed-checkout-form .woocommerce .col2-set .col-1, .elementor-10979 .elementor-element.elementor-element-a504e38 .wcf-embed-checkout-form .woocommerce .col2-set .col-2, .elementor-10979 .elementor-element.elementor-element-a504e38 .wcf-embed-checkout-form .woocommerce form p.form-row label, .elementor-10979 .elementor-element.elementor-element-a504e38 .wcf-embed-checkout-form .woocommerce #payment [type="radio"]:checked + label, .elementor-10979 .elementor-element.elementor-element-a504e38 .wcf-embed-checkout-form .woocommerce #payment [type="radio"]:not(:checked) + label, .elementor-10979 .elementor-element.elementor-element-a504e38 .wcf-embed-checkout-form .woocommerce form .form-row select {
+.elementor-10979
+  .elementor-element.elementor-element-a504e38
+  .wcf-embed-checkout-form
+  .woocommerce
+  form
+  .form-row
+  input.input-text::placeholder,
+.elementor-10979
+  .elementor-element.elementor-element-a504e38
+  .wcf-embed-checkout-form
+  .woocommerce
+  form
+  .form-row
+  input.input-text,
+.elementor-10979
+  .elementor-element.elementor-element-a504e38
+  .wcf-embed-checkout-form
+  .woocommerce
+  form
+  .form-row
+  textarea,
+.elementor-10979
+  .elementor-element.elementor-element-a504e38
+  .wcf-embed-checkout-form
+  .select2-container--default
+  .select2-selection--single,
+.elementor-10979
+  .elementor-element.elementor-element-a504e38
+  .wcf-embed-checkout-form
+  .woocommerce
+  form
+  .form-row
+  select.select,
+.elementor-10979
+  .elementor-element.elementor-element-a504e38
+  .wcf-embed-checkout-form
+  .woocommerce
+  .col2-set
+  .col-1,
+.elementor-10979
+  .elementor-element.elementor-element-a504e38
+  .wcf-embed-checkout-form
+  .woocommerce
+  .col2-set
+  .col-2,
+.elementor-10979
+  .elementor-element.elementor-element-a504e38
+  .wcf-embed-checkout-form
+  .woocommerce
+  form
+  p.form-row
+  label,
+.elementor-10979
+  .elementor-element.elementor-element-a504e38
+  .wcf-embed-checkout-form
+  .woocommerce
+  #payment
+  [type="radio"]:checked
+  + label,
+.elementor-10979
+  .elementor-element.elementor-element-a504e38
+  .wcf-embed-checkout-form
+  .woocommerce
+  #payment
+  [type="radio"]:not(:checked)
+  + label,
+.elementor-10979
+  .elementor-element.elementor-element-a504e38
+  .wcf-embed-checkout-form
+  .woocommerce
+  form
+  .form-row
+  select {
   direction: rtl;
 }
 
@@ -36,6 +107,9 @@ form.checkout.woocommerce-checkout.nova-checkout {
 }
 .wcf-shipping-methods-wrapper {
   padding: 0 !important;
+  @media (max-width: 768px) {
+    margin: 0 !important;
+  }
 }
 
 .wcf-embed-checkout-form .nova-checkout .nova-checkout__section--personal,
@@ -486,7 +560,7 @@ form.checkout.woocommerce-checkout.nova-checkout {
   }
 }
 
-.form-row:has(#og-paymentscount){
+.form-row:has(#og-paymentscount) {
   max-width: 101px;
 }
 
@@ -727,6 +801,9 @@ form.checkout.woocommerce-checkout.nova-checkout {
   .wcf-shipping-methods-wrapper
   ul#shipping_method {
   border: none;
+  @media (max-width: 768px) {
+    margin: 0 !important;
+  }
 }
 .wcf-embed-checkout-form
   .woocommerce
@@ -735,6 +812,9 @@ form.checkout.woocommerce-checkout.nova-checkout {
   ul#shipping_method
   li {
   padding: 0 0 16px;
+  @media (max-width: 768px) {
+    padding: 0 0 8px !important;
+  }
 }
 .wcf-embed-checkout-form
   .woocommerce

@@ -165,6 +165,7 @@ add_action('wp_enqueue_scripts', 'nova_rotating_banner_enqueue_assets', 25);
 function nova_rotating_banner_render($atts = array())
 {
 	$settings = nova_rotating_banner_get_settings();
+	$font_weight = isset($atts['font_weight']) ? (string) $atts['font_weight'] : '300';
 
 	if (empty($settings['enabled']) || empty($settings['messages'])) {
 		return '';
@@ -209,7 +210,7 @@ function nova_rotating_banner_render($atts = array())
 							loading="eager"
 							decoding="async" />
 					<?php endif; ?>
-					<span class="nova-rotating-banner__text"><?php echo esc_html($message['text']); ?></span>
+					<span class="nova-rotating-banner__text" style="font-weight: <?php echo esc_attr($font_weight); ?>;"><?php echo esc_html($message['text']); ?></span>
 				</div>
 			<?php endforeach; ?>
 		</div>
