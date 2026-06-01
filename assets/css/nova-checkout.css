@@ -192,7 +192,9 @@
 .nova-checkout .nova-checkout__personal-fields #billing_country_display_field,
 .nova-checkout .nova-checkout__personal-fields #billing_phone_field,
 .nova-checkout .nova-checkout__personal-fields #order_comments_field,
-.nova-checkout .nova-checkout__personal-fields #vuelve_marketing_consent_field {
+.nova-checkout
+  .nova-checkout__personal-fields
+  p.form-row:has(#flashy_accept_marketing) {
   grid-column: 1 / -1;
 }
 
@@ -347,25 +349,24 @@
   height: 42px;
 }
 
-/* Vuelve marketing consent — custom checkbox (RTL: box on the right). */
-.nova-checkout .nova-checkout__personal-fields #vuelve_marketing_consent_field,
-.nova-checkout .nova-checkout__personal-fields .nova-checkout__vuelve-consent {
+/* Flashy marketing consent — custom checkbox (RTL: box on the right). */
+.nova-checkout
+  .nova-checkout__personal-fields
+  p.form-row:has(#flashy_accept_marketing) {
   align-self: start;
   margin-top: 4px !important;
-}
-
-.nova-checkout
-  .nova-checkout__personal-fields
-  #vuelve_marketing_consent_field
-  label.woocommerce-form__label-for-checkbox,
-.nova-checkout
-  .nova-checkout__personal-fields
-  .nova-checkout__vuelve-consent
-  label.woocommerce-form__label-for-checkbox {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   gap: 10px;
+  direction: rtl;
+}
+
+.nova-checkout
+  .nova-checkout__personal-fields
+  p.form-row:has(#flashy_accept_marketing)
+  label[for="flashy_accept_marketing"] {
+  flex: 1 1 auto;
   margin: 0;
   padding: 0;
   font-size: 14px;
@@ -373,20 +374,12 @@
   line-height: 1.5;
   color: #444444;
   text-align: right;
-  direction: rtl;
   cursor: pointer;
 }
 
 .nova-checkout
   .nova-checkout__personal-fields
-  #vuelve_marketing_consent_field
-  label
-  input[type="checkbox"],
-.nova-checkout
-  .nova-checkout__personal-fields
-  .nova-checkout__vuelve-consent
-  label
-  input[type="checkbox"] {
+  #flashy_accept_marketing {
   appearance: none;
   -webkit-appearance: none;
   flex: 0 0 20px;
@@ -405,36 +398,17 @@
   accent-color: transparent;
   display: block;
 }
-.woocommerce form .form-row label.checkbox, .woocommerce-page form .form-row label.checkbox{
-	display: flex;
-	align-items: center;
-	gap: 10px;
-}
 
 .nova-checkout
   .nova-checkout__personal-fields
-  #vuelve_marketing_consent_field
-  label
-  input[type="checkbox"]:checked,
-.nova-checkout
-  .nova-checkout__personal-fields
-  .nova-checkout__vuelve-consent
-  label
-  input[type="checkbox"]:checked {
+  #flashy_accept_marketing:checked {
   background: #ffffff;
   border-color: #d1d1d1;
 }
 
 .nova-checkout
   .nova-checkout__personal-fields
-  #vuelve_marketing_consent_field
-  label
-  input[type="checkbox"]:checked::after,
-.nova-checkout
-  .nova-checkout__personal-fields
-  .nova-checkout__vuelve-consent
-  label
-  input[type="checkbox"]:checked::after {
+  #flashy_accept_marketing:checked::after {
   content: "";
   position: absolute;
   top: 2px;
@@ -449,14 +423,7 @@
 
 .nova-checkout
   .nova-checkout__personal-fields
-  #vuelve_marketing_consent_field
-  label
-  input[type="checkbox"]:focus-visible,
-.nova-checkout
-  .nova-checkout__personal-fields
-  .nova-checkout__vuelve-consent
-  label
-  input[type="checkbox"]:focus-visible {
+  #flashy_accept_marketing:focus-visible {
   outline: 2px solid var(--nova-checkout-accent);
   outline-offset: 2px;
 }
@@ -1193,7 +1160,8 @@ ul#shipping_method
   }
 
   .nova-checkout .nova-checkout__personal-fields {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: column;
   }
 
   .nova-checkout .nova-checkout__personal-fields #billing_first_name_field,

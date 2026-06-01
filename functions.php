@@ -603,7 +603,7 @@ function nova_checkout_apply_label_above_input( &$field ) {
 }
 
 /**
- * Personal checkout fields: order, two-column pairs, marketing checkbox after order notes.
+ * Personal checkout fields: order, two-column pairs (marketing consent via Flashy only).
  *
  * @param array<string, array<string, array<string, mixed>>> $fields Checkout fields.
  * @return array<string, array<string, array<string, mixed>>>
@@ -680,28 +680,15 @@ function nova_checkout_personal_fields_layout( $fields ) {
 			}
 		}
 
-		if ( isset( $fields['billing']['vuelve_marketing_consent'] ) ) {
-			$consent = $fields['billing']['vuelve_marketing_consent'];
-			unset( $fields['billing']['vuelve_marketing_consent'] );
-
-			if ( ! isset( $fields['order'] ) || ! is_array( $fields['order'] ) ) {
-				$fields['order'] = array();
+		foreach ( array( 'billing', 'order' ) as $consent_section ) {
+			if ( isset( $fields[ $consent_section ]['vuelve_marketing_consent'] ) ) {
+				unset( $fields[ $consent_section ]['vuelve_marketing_consent'] );
 			}
-
-			$consent['priority'] = 20;
-			$consent['class']    = array_merge(
-				array( 'form-row-wide', 'update_totals_on_change', 'nova-checkout__vuelve-consent' ),
-				(array) $consent['class']
-			);
-			$fields['order']['vuelve_marketing_consent'] = $consent;
 		}
 	}
 
 	if ( isset( $fields['order'] ) && is_array( $fields['order'] ) ) {
 		foreach ( $fields['order'] as $key => $order_field ) {
-			if ( 'vuelve_marketing_consent' === $key ) {
-				continue;
-			}
 			if ( 'order_comments' === $key ) {
 				$fields['order'][ $key ]['priority'] = 10;
 				$fields['order'][ $key ]['class']    = $wide;
@@ -713,6 +700,51 @@ function nova_checkout_personal_fields_layout( $fields ) {
 	return $fields;
 }
 add_filter( 'woocommerce_checkout_fields', 'nova_checkout_personal_fields_layout', 10000000000000001 );
+
+/**
+ * Read Flashy marketing checkbox state from checkout POST data.
+ *
+ * @return int 1 when checked, 0 otherwise.
+ */
+function nova_checkout_flashy_marketing_consent_from_request() {
+	if ( isset( $_POST['post_data'] ) ) {
+		$raw = sanitize_textarea_field( wp_unslash( (string) $_POST['post_data'] ) );
+		if ( '' !== $raw ) {
+			$form = array();
+			parse_str( $raw, $form );
+			return ! empty( $form['flashy_accept_marketing'] ) ? 1 : 0;
+		}
+	}
+
+	if ( isset( $_POST['flashy_accept_marketing'] ) ) {
+		return 1;
+	}
+
+	return 0;
+}
+
+/**
+ * Mirror Flashy checkout consent into Vuelve session (cart webhooks / order meta).
+ *
+ * Vuelve's own checkbox is hidden; without this sync, Vuelve would treat consent as unchecked.
+ */
+function nova_checkout_sync_flashy_to_vuelve_consent() {
+	if ( ! function_exists( 'WC' ) || ! WC()->session ) {
+		return;
+	}
+
+	WC()->session->set( 'vuelve_marketing_consent', nova_checkout_flashy_marketing_consent_from_request() );
+}
+add_action( 'woocommerce_checkout_update_order_review', 'nova_checkout_sync_flashy_to_vuelve_consent', 20 );
+add_action( 'woocommerce_checkout_process_checkout', 'nova_checkout_sync_flashy_to_vuelve_consent', 5 );
+add_filter(
+	'woocommerce_update_order_review_fragments',
+	function ( $fragments ) {
+		nova_checkout_sync_flashy_to_vuelve_consent();
+		return $fragments;
+	},
+	100
+);
 
 /**
  * Remove "(אופציונלי)" from billing_address_2 label.
