@@ -62,8 +62,6 @@ add_action(
 			);
 		}
 
-		/*
-		// NOVA custom checkout (standard WC) — disabled.
 		if (
 			function_exists( 'is_checkout' )
 			&& is_checkout()
@@ -103,7 +101,6 @@ add_action(
 				);
 			}
 		}
-		*/
 
 		if ( is_product() ) {
 			$deps = wp_style_is( 'woocommerce-general', 'registered' ) ? array( 'woocommerce-general' ) : array();
@@ -456,11 +453,6 @@ add_action(
  * Optional: hide legacy Elementor section by data-id (replace with your section id).
  */
 /**
- * NOVA custom checkout (standard WooCommerce + CartFlows flow) — temporarily disabled.
- * Uncomment add_action/add_filter registrations below and the enqueue block in nova_child_enqueue_assets to re-enable.
- */
-
-/**
  * Checkout place-order button label (Hebrew).
  *
  * @param string $text Default button text.
@@ -477,7 +469,7 @@ function nova_checkout_place_order_button_text( $text ) {
 	}
 	return $text;
 }
-// add_filter( 'woocommerce_order_button_text', 'nova_checkout_place_order_button_text', 20 );
+add_filter( 'woocommerce_order_button_text', 'nova_checkout_place_order_button_text', 20 );
 
 /**
  * Card brand icons below the payment section.
@@ -534,7 +526,7 @@ function nova_render_checkout_payment_icons() {
 	}
 	echo '</div>';
 }
-// add_action( 'nova_checkout_payment_icons', 'nova_render_checkout_payment_icons', 10 );
+add_action( 'nova_checkout_payment_icons', 'nova_render_checkout_payment_icons', 10 );
 
 /**
  * Fallback card icons strip when individual SVGs are not in the theme.
@@ -572,7 +564,7 @@ function nova_checkout_payment_icons_fallback( $icons ) {
 		),
 	);
 }
-// add_filter( 'nova_checkout_payment_icon_list', 'nova_checkout_payment_icons_fallback', 99 );
+add_filter( 'nova_checkout_payment_icon_list', 'nova_checkout_payment_icons_fallback', 99 );
 
 /**
  * Use visible label above input; clear CartFlows placeholder-as-label.
@@ -707,7 +699,7 @@ function nova_checkout_personal_fields_layout( $fields ) {
 
 	return $fields;
 }
-// add_filter( 'woocommerce_checkout_fields', 'nova_checkout_personal_fields_layout', 10000000000000001 );
+add_filter( 'woocommerce_checkout_fields', 'nova_checkout_personal_fields_layout', 10000000000000001 );
 
 /**
  * Read Flashy marketing checkbox state from checkout POST data.
@@ -743,16 +735,16 @@ function nova_checkout_sync_flashy_to_vuelve_consent() {
 
 	WC()->session->set( 'vuelve_marketing_consent', nova_checkout_flashy_marketing_consent_from_request() );
 }
-// add_action( 'woocommerce_checkout_update_order_review', 'nova_checkout_sync_flashy_to_vuelve_consent', 20 );
-// add_action( 'woocommerce_checkout_process_checkout', 'nova_checkout_sync_flashy_to_vuelve_consent', 5 );
-// add_filter(
-// 	'woocommerce_update_order_review_fragments',
-// 	function ( $fragments ) {
-// 		nova_checkout_sync_flashy_to_vuelve_consent();
-// 		return $fragments;
-// 	},
-// 	100
-// );
+add_action( 'woocommerce_checkout_update_order_review', 'nova_checkout_sync_flashy_to_vuelve_consent', 20 );
+add_action( 'woocommerce_checkout_process_checkout', 'nova_checkout_sync_flashy_to_vuelve_consent', 5 );
+add_filter(
+	'woocommerce_update_order_review_fragments',
+	function ( $fragments ) {
+		nova_checkout_sync_flashy_to_vuelve_consent();
+		return $fragments;
+	},
+	100
+);
 
 /**
  * Remove "(אופציונלי)" from billing_address_2 label.
@@ -775,7 +767,7 @@ function nova_checkout_strip_optional_from_billing_address_2_label( $fields ) {
 
 	return $fields;
 }
-// add_filter( 'woocommerce_checkout_fields', 'nova_checkout_strip_optional_from_billing_address_2_label', 10000000000000002 );
+add_filter( 'woocommerce_checkout_fields', 'nova_checkout_strip_optional_from_billing_address_2_label', 10000000000000002 );
 
 /**
  * Drop display-only country field from POST; keep billing country as IL.
@@ -796,7 +788,7 @@ function nova_checkout_posted_data_country( $data ) {
 
 	return $data;
 }
-// add_filter( 'woocommerce_checkout_posted_data', 'nova_checkout_posted_data_country', 10 );
+add_filter( 'woocommerce_checkout_posted_data', 'nova_checkout_posted_data_country', 10 );
 
 /**
  * Default billing country to Israel on checkout.
@@ -811,7 +803,7 @@ function nova_checkout_default_billing_country( $value, $input ) {
 	}
 	return $value;
 }
-// add_filter( 'woocommerce_checkout_get_value', 'nova_checkout_default_billing_country', 10, 2 );
+add_filter( 'woocommerce_checkout_get_value', 'nova_checkout_default_billing_country', 10, 2 );
 
 /**
  * Remove quantity from product-name column on checkout.
@@ -830,7 +822,7 @@ function nova_checkout_hide_quantity_in_product_name( $quantity_html, $cart_item
 
 	return '';
 }
-// add_filter( 'woocommerce_checkout_cart_item_quantity', 'nova_checkout_hide_quantity_in_product_name', 20, 3 );
+add_filter( 'woocommerce_checkout_cart_item_quantity', 'nova_checkout_hide_quantity_in_product_name', 20, 3 );
 
 /**
  * Print quantity next to subtotal in product-total column on checkout.
@@ -855,7 +847,7 @@ function nova_checkout_move_quantity_to_product_total( $subtotal_html, $cart_ite
 	$qty_html = '<strong class="product-quantity">&times;&nbsp;' . esc_html( (string) $qty ) . '</strong>';
 	return $qty_html . ' ' . $subtotal_html;
 }
-// add_filter( 'woocommerce_cart_item_subtotal', 'nova_checkout_move_quantity_to_product_total', 20, 3 );
+add_filter( 'woocommerce_cart_item_subtotal', 'nova_checkout_move_quantity_to_product_total', 20, 3 );
 
 /**
  * Persist ?cf-redirect=1 for checkout AJAX (update_order_review has no query string).
@@ -878,7 +870,7 @@ function nova_checkout_sync_cf_redirect_flag() {
 		WC()->session->set( 'nova_cf_redirect', null );
 	}
 }
-// add_action( 'template_redirect', 'nova_checkout_sync_cf_redirect_flag', 5 );
+add_action( 'template_redirect', 'nova_checkout_sync_cf_redirect_flag', 5 );
 
 /**
  * CartFlows flow redirect (?cf-redirect=1), including WC checkout fragments AJAX.
@@ -956,7 +948,7 @@ function nova_print_checkout_flow_style_in_footer() {
 		esc_url( $href )
 	);
 }
-// add_action( 'wp_footer', 'nova_print_checkout_flow_style_in_footer', 5 );
+add_action( 'wp_footer', 'nova_print_checkout_flow_style_in_footer', 5 );
 
 /**
  * Whether CartFlows "remove product" is enabled for the current checkout step.
@@ -1076,12 +1068,11 @@ function nova_checkout_order_item_name_with_image( $product_name, $cart_item, $c
 		'<span class="nova-checkout__order-product-name">' . wp_kses_post( $product_name ) . '</span>' .
 		'</span>';
 }
-// add_filter( 'woocommerce_cart_item_name', 'nova_checkout_order_item_name_with_image', 25, 3 );
+add_filter( 'woocommerce_cart_item_name', 'nova_checkout_order_item_name_with_image', 25, 3 );
 
 /**
  * Checkout: use child theme form-checkout (payment inside #customer_details).
  */
-/*
 add_filter(
 	'woocommerce_locate_template',
 	function ( $template, $template_name ) {
@@ -1098,12 +1089,10 @@ add_filter(
 	25,
 	2
 );
-*/
 
 /**
  * Checkout: keep #payment out of #order_review (rendered in form-checkout.php).
  */
-/*
 add_action(
 	'wp',
 	function () {
@@ -1118,7 +1107,6 @@ add_action(
 	},
 	100
 );
-*/
 
 /**
  * Unhook CartFlows plain .wcf-customer-shipping (registered on shortcode init, after wp:100).
@@ -1138,11 +1126,11 @@ function nova_checkout_remove_cartflows_default_shipping() {
 		10
 	);
 }
-// add_action( 'cartflows_checkout_before_shortcode', 'nova_checkout_remove_cartflows_default_shipping', 20 );
-// add_action( 'cartflows_elementor_before_checkout_shortcode', 'nova_checkout_remove_cartflows_default_shipping', 20 );
-// add_action( 'cartflows_gutenberg_before_checkout_shortcode', 'nova_checkout_remove_cartflows_default_shipping', 20 );
-// add_action( 'cartflows_bb_before_checkout_shortcode', 'nova_checkout_remove_cartflows_default_shipping', 20 );
-// add_action( 'wp', 'nova_checkout_remove_cartflows_default_shipping', 999 );
+add_action( 'cartflows_checkout_before_shortcode', 'nova_checkout_remove_cartflows_default_shipping', 20 );
+add_action( 'cartflows_elementor_before_checkout_shortcode', 'nova_checkout_remove_cartflows_default_shipping', 20 );
+add_action( 'cartflows_gutenberg_before_checkout_shortcode', 'nova_checkout_remove_cartflows_default_shipping', 20 );
+add_action( 'cartflows_bb_before_checkout_shortcode', 'nova_checkout_remove_cartflows_default_shipping', 20 );
+add_action( 'wp', 'nova_checkout_remove_cartflows_default_shipping', 999 );
 
 /**
  * CartFlows checkout markup for shipping (child cartflows template + fragment selectors).
@@ -1224,7 +1212,7 @@ function nova_checkout_shipping_package_name_he( $package_name, $index ) {
 
 	return $title;
 }
-// add_filter( 'woocommerce_shipping_package_name', 'nova_checkout_shipping_package_name_he', 20, 2 );
+add_filter( 'woocommerce_shipping_package_name', 'nova_checkout_shipping_package_name_he', 20, 2 );
 
 /**
  * Render standard WooCommerce shipping methods (child checkout template).
@@ -1348,7 +1336,7 @@ function nova_checkout_filter_shipping_fragments( $fragments ) {
 
 	return $fragments;
 }
-// add_filter( 'woocommerce_update_order_review_fragments', 'nova_checkout_filter_shipping_fragments', 99 );
+add_filter( 'woocommerce_update_order_review_fragments', 'nova_checkout_filter_shipping_fragments', 99 );
 
 /**
  * Shipping section with step badge (between personal details and payment).
@@ -1384,7 +1372,7 @@ function nova_checkout_render_shipping_section() {
 	</section>
 	<?php
 }
-// add_action( 'nova_checkout_before_payment_section', 'nova_checkout_render_shipping_section', 10 );
+add_action( 'nova_checkout_before_payment_section', 'nova_checkout_render_shipping_section', 10 );
 
 /**
  * Whether the current CartFlows checkout step uses the instant layout.
@@ -1429,7 +1417,7 @@ function nova_checkout_coupon_field_setup() {
 	remove_action( 'woocommerce_checkout_order_review', array( $markup, 'display_custom_coupon_field' ), 10 );
 	add_action( 'woocommerce_checkout_order_review', array( $markup, 'display_custom_coupon_field' ), 99 );
 }
-// add_action( 'wp', 'nova_checkout_coupon_field_setup', 110 );
+add_action( 'wp', 'nova_checkout_coupon_field_setup', 110 );
 
 add_action(
 	'wp_head',
